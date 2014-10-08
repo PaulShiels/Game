@@ -1,0 +1,60 @@
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\bin\Debug\Example.exe.config
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\bin\Debug\Example.exe
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\bin\Debug\Example.pdb
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\bin\Debug\WPF.MDI.dll
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\bin\Debug\WPF.MDI.pdb
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\ResolveAssemblyReference.cache
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Controls\ExampleControl.baml
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Main.baml
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Controls\ExampleControl.g.cs
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Main.g.cs
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\App.g.cs
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Example_MarkupCompile.cache
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Example.g.resources
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Example.exe
+C:\2012 - 2013\Advanced .NET\MDI Example\Example\obj\Debug\Example.pdb
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\bin\Debug\Example.exe.config
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\bin\Debug\Example.exe
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\bin\Debug\Example.pdb
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\bin\Debug\WPF.MDI.dll
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\bin\Debug\WPF.MDI.pdb
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Example.csprojResolveAssemblyReference.cache
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Controls\ExampleControl.baml
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Main.baml
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Controls\ExampleControl.g.cs
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Main.g.cs
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\App.g.cs
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Example_MarkupCompile.cache
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Example.g.resources
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Example.exe
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\Example\obj\Debug\Example.pdb
+H:\Year4\Adv.Net\MDI Example\Example\bin\Debug\Example.exe.config
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Example.exe
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Example.pdb
+H:\Year4\Adv.Net\MDI Example\Example\bin\Debug\Example.exe
+H:\Year4\Adv.Net\MDI Example\Example\bin\Debug\Example.pdb
+H:\Year4\Adv.Net\MDI Example\Example\bin\Debug\WPF.MDI.dll
+H:\Year4\Adv.Net\MDI Example\Example\bin\Debug\WPF.MDI.pdb
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Example.csprojResolveAssemblyReference.cache
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Controls\ExampleControl.baml
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Main.baml
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Controls\ExampleControl.g.cs
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Main.g.cs
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\App.g.cs
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Example_MarkupCompile.cache
+H:\Year4\Adv.Net\MDI Example\Example\obj\Debug\Example.g.resources
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\bin\Debug\Example.exe.config
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example.exe
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example.pdb
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\bin\Debug\Example.exe
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\bin\Debug\Example.pdb
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\bin\Debug\WPF.MDI.dll
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\bin\Debug\WPF.MDI.pdb
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example.csprojResolveAssemblyReference.cache
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Controls\ExampleControl.baml
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Main.baml
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Controls\ExampleControl.g.cs
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Main.g.cs
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\App.g.cs
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example_MarkupCompile.cache
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example.g.resources

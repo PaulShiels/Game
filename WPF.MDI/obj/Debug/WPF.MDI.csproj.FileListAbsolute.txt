@@ -1,0 +1,20 @@
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\bin\Debug\WPF.MDI.dll
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\bin\Debug\WPF.MDI.pdb
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\ResolveAssemblyReference.cache
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\WPF.MDI_MarkupCompile.cache
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\WPF.MDI_MarkupCompile.lref
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\Themes\Generic.baml
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\WPF.MDI.g.resources
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\WPF.MDI.dll
+C:\2012 - 2013\Advanced .NET\MDI Example\WPF.MDI\obj\Debug\WPF.MDI.pdb
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\bin\Debug\WPF.MDI.dll
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\bin\Debug\WPF.MDI.pdb
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\WPF.MDI.csprojResolveAssemblyReference.cache
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\WPF.MDI_MarkupCompile.cache
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\WPF.MDI_MarkupCompile.lref
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\Themes\Generic.baml
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\WPF.MDI.g.resources
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\WPF.MDI.dll
+C:\Users\s00119099\Downloads\MDI Example\MDI Example\WPF.MDI\obj\Debug\WPF.MDI.pdb
