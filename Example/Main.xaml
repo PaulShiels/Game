@@ -2,11 +2,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mdi="clr-namespace:WPF.MDI;assembly=WPF.MDI"
-    Title="WPF.MDI Example" WindowState="Maximized" WindowStyle="None">
+    Title="WPF.MDI Example" WindowState="Maximized" WindowStyle="None" Loaded="ContainerWindow_Loaded">
     <DockPanel>
         <mdi:MdiContainer Name="Container">
             <mdi:MdiContainer.Menu>
-                <Menu DockPanel.Dock="Top">
+                <Menu Name="menu" Height="20" DockPanel.Dock="Top">
                     <MenuItem Header="Add">
                         <MenuItem Header="Normal Window" Click="AddWindow_Click" />
                         <MenuItem Header="Fixed Window" Click="AddFixedWindow_Click" />
@@ -21,17 +21,22 @@
                     <MenuItem Header="Windows" x:Name="WindowsMenu" x:FieldModifier="private" />
                 </Menu>
             </mdi:MdiContainer.Menu>
-            
-            <mdi:MdiChild Title="Empty Window Using XAML" />
-            <mdi:MdiChild Name="ScoringWindow" Title="Window Using XAML" Loaded="ScoringWindow_Loaded" Icon="OriginalLogo.png">
-                <StackPanel>
-                    <Button Name="DisableMinimize" Height="20" Click="DisableMinimize_Click">Disable Minimize</Button>
-                    <Button Name="EnableMinimize" Height="20" Click="EnableMinimize_Click">Enable Minimize</Button>
-                    <Button Name="DisableMaximize" Height="20" Click="DisableMaximize_Click">Disable Maximize</Button>
-                    <Button Name="EnableMaximize" Height="20" Click="EnableMaximize_Click">Enable Maximize</Button>
-                    <Button Name="ShowIcon" Height="20" Click="ShowIcon_Click">Show Icon</Button>
-                    <Button Name="HideIcon" Height="20" Click="HideIcon_Click">Hide Icon</Button>
-                </StackPanel>
+
+            <mdi:MdiChild Name="PlayingWindow" Title="Playing Area" Loaded="PlayingWindow_Loaded" >
+            </mdi:MdiChild>
+            <mdi:MdiChild Name="ScoringWindow" Title="Scoring Area" Loaded="ScoringWindow_Loaded" Icon="OriginalLogo.png">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Margin="10" Background="BlanchedAlmond">                        
+                        <Label Content="Santa's List" HorizontalContentAlignment="Center" FontFamily="Snap ITC" FontSize="22"/>
+                        <ItemsControl Name="lstPresents" Margin="5, 0" Background="BlanchedAlmond" BorderThickness="0" FontFamily="Tempus Sans ITC" FontSize="18"></ItemsControl>
+                    </StackPanel>
+                </Grid>
             </mdi:MdiChild>
         </mdi:MdiContainer>
     </DockPanel>

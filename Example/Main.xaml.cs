@@ -4,6 +4,7 @@ using System.Windows.Media.Imaging;
 using Example.Controls;
 using WPF.MDI;
 using System.Windows.Controls;
+using System.Collections.Generic;
 namespace Example
 {
 	/// <summary>
@@ -19,21 +20,26 @@ namespace Example
 			InitializeComponent();
 			Container.Children.CollectionChanged += (o, e) => Menu_RefreshWindows();
 
-			Container.Children.Add(new MdiChild
-			{
-				Title = "Empty Window Using Code",
-				Icon = new BitmapImage(new Uri("OriginalLogo.png", UriKind.Relative))
-			});
+            //Container.Children.Add(new MdiChild
+            //{
+            //    Title = "Empty Window Using Code",
+            //    Icon = new BitmapImage(new Uri("OriginalLogo.png", UriKind.Relative))
+            //});
 
-			Container.Children.Add(new MdiChild
-			{
-				Title = "Window Using Code",
-				Content = new ExampleControl(),
-				Width = 714,
-				Height = 734,
-				Position = new Point(200, 30)
-			});
+            //Container.Children.Add(new MdiChild
+            //{
+            //    Title = "Window Using Code",
+            //    Content = new ExampleControl(),
+            //    Width = 714,
+            //    Height = 734,
+            //    Position = new Point(200, 30)
+            //});
 		}
+
+        private void ContainerWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
 
 		#region Theme Menu Events
 
@@ -149,80 +155,33 @@ namespace Example
 
 		#endregion
 
-		#region Content Button Events
-
-		/// <summary>
-		/// Handles the Click event of the DisableMinimize control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void DisableMinimize_Click(object sender, RoutedEventArgs e)
-		{
-			ScoringWindow.MinimizeBox = false;
-		}
-
-		/// <summary>
-		/// Handles the Click event of the EnableMinimize control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void EnableMinimize_Click(object sender, RoutedEventArgs e)
-		{
-			ScoringWindow.MinimizeBox = true;
-		}
-
-		/// <summary>
-		/// Handles the Click event of the DisableMaximize control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void DisableMaximize_Click(object sender, RoutedEventArgs e)
-		{
-			ScoringWindow.MaximizeBox = false;
-		}
-
-		/// <summary>
-		/// Handles the Click event of the EnableMaximize control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void EnableMaximize_Click(object sender, RoutedEventArgs e)
-		{
-			ScoringWindow.MaximizeBox = true;
-		}
-
-		/// <summary>
-		/// Handles the Click event of the ShowIcon control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void ShowIcon_Click(object sender, RoutedEventArgs e)
-		{
-			ScoringWindow.ShowIcon = true;
-		}
-
-		/// <summary>
-		/// Handles the Click event of the HideIcon control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
-		private void HideIcon_Click(object sender, RoutedEventArgs e)
-		{
-			ScoringWindow.ShowIcon = false;
-		}
-		#endregion
+        #region Scoring Window
 
         private void ScoringWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            ScoringWindow.Height = System.Windows.SystemParameters.PrimaryScreenHeight - ContainerWindow.WindowsMenu.Height;
-            ScoringWindow.Width = System.Windows.SystemParameters.PrimaryScreenWidth / 2;
-            ScoringWindow.Position = new Point((System.Windows.SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
+            ScoringWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
+            ScoringWindow.Width = SystemParameters.PrimaryScreenWidth / 2;
+            ScoringWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
+
+            List<string> presents = new List<string>() {"Ball", "Bike", "Phone", "Laptop" };
+            lstPresents.ItemsSource = presents;
             
         }
+
+        #endregion
 
         private void MenuItemExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+
+        private void PlayingWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            PlayingWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
+            PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2;
+            //PlayingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
+        }
+
+        
 	}
 }
