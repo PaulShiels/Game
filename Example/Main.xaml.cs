@@ -5,6 +5,10 @@ using Example.Controls;
 using WPF.MDI;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Windows.Threading;
+using System.IO;
+using System.Windows.Input;
+using System.Windows.Media;
 namespace Example
 {
 	/// <summary>
@@ -15,6 +19,12 @@ namespace Example
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Main"/> class.
 		/// </summary>
+
+        DispatcherTimer timer = new DispatcherTimer();
+        private List<Present> lstPresentImages = new List<Present>();
+        private DirectoryInfo imagesFolder = new DirectoryInfo(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString() + "\\Images\\");
+        private int position;
+
 		public Main()
 		{
 			InitializeComponent();
@@ -38,6 +48,49 @@ namespace Example
 
         private void ContainerWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = new TimeSpan(0, 0, 0, 0 ,100);
+        }
+
+        private void PlayingWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            PlayingWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
+            PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2;
+            //PlayingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
+            PopulatePesentImageList();
+            int startLeftPosition = -50, startTopPosition = 20;
+            foreach (var image in lstPresentImages)
+            {
+                imgCanvas.Children.Add(image.ImageObject);
+                Canvas.SetTop(image.ImageObject, startTopPosition);
+                Canvas.SetLeft(image.ImageObject, startLeftPosition);
+                startTopPosition += 80;
+                startLeftPosition -= 30;
+            }           
+
+            //MessageBox.Show(imgBall)
+            timer.Start();
+        }
+
+        private void PopulatePesentImageList()
+        {                        
+            foreach (var file in imagesFolder.GetFiles("*.*"))
+            {
+                Present p = new Present(file);                
+                lstPresentImages.Add(p);
+            }
+        }
+
+        
+
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            foreach (var present in lstPresentImages)
+            {
+                Canvas.SetLeft(present.ImageObject, present.MovementSpeed);
+                present.MovementSpeed++;
+            }
             
         }
 
@@ -165,6 +218,8 @@ namespace Example
 
             List<string> presents = new List<string>() {"Ball", "Bike", "Phone", "Laptop" };
             lstPresents.ItemsSource = presents;
+
+            imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "sleigh.png"));
             
         }
 
@@ -175,12 +230,17 @@ namespace Example
             this.Close();
         }
 
-        private void PlayingWindow_Loaded(object sender, RoutedEventArgs e)
+        private void imgSleigh_Drop(object sender, DragEventArgs e)
         {
-            PlayingWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
-            PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2;
-            //PlayingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
+            ImageSource image = e.Data.GetData(typeof(ImageSource)) as ImageSource;
+            Image imageControl = new Image() { Width = image.Width, Height = image.Height, Source = image };
+            {
+                //e.Effects = DragDropEffects.Copy;
+                MessageBox.Show(e.Source.ToString());
+            }
         }
+
+        
 
         
 	}

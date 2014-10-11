@@ -1,6 +1,5 @@
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\WPF.MDI\bin\Debug\WPF.MDI.dll
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\WPF.MDI\bin\Debug\WPF.MDI.pdb
-C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\WPF.MDI\obj\Debug\Game.csprojResolveAssemblyReference.cache
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\WPF.MDI\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\WPF.MDI\obj\Debug\WPF.MDI_MarkupCompile.cache
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\WPF.MDI\obj\Debug\WPF.MDI_MarkupCompile.lref

@@ -23,6 +23,20 @@
             </mdi:MdiContainer.Menu>
 
             <mdi:MdiChild Name="PlayingWindow" Title="Playing Area" Loaded="PlayingWindow_Loaded" >
+                <Grid>
+                    <!--<Grid.RowDefinitions>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="10*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>-->
+                    <Canvas Name="imgCanvas">
+                        <!--<Image Name="image1" Height="50" Width="100" Margin="100,300" MouseDown="imgPresent_MouseDown" HorizontalAlignment="Center" VerticalAlignment="Center" Source="C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\Images\sleigh.png"></Image>-->
+                    </Canvas>
+                </Grid>
             </mdi:MdiChild>
             <mdi:MdiChild Name="ScoringWindow" Title="Scoring Area" Loaded="ScoringWindow_Loaded" Icon="OriginalLogo.png">
                 <Grid>
@@ -36,6 +50,7 @@
                         <Label Content="Santa's List" HorizontalContentAlignment="Center" FontFamily="Snap ITC" FontSize="22"/>
                         <ItemsControl Name="lstPresents" Margin="5, 0" Background="BlanchedAlmond" BorderThickness="0" FontFamily="Tempus Sans ITC" FontSize="18"></ItemsControl>
                     </StackPanel>
+                    <Image Name="imgSleigh" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" Margin="10,0" AllowDrop="True" Drop="imgSleigh_Drop"></Image>
                 </Grid>
             </mdi:MdiChild>
         </mdi:MdiContainer>
