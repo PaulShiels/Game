@@ -13,3 +13,4 @@ C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example_Ma
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example.g.resources
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example.exe
 C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example.pdb
+C:\Users\Paul\Documents\IT\Year4\Advanced_.Net\Game\Example\obj\Debug\Example_MarkupCompile.lref

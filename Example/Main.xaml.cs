@@ -21,7 +21,7 @@ namespace Example
 		/// </summary>
 
         DispatcherTimer timer = new DispatcherTimer();
-        private List<Present> lstPresentImages = new List<Present>();
+        private List<Present> lstPresentImg = new List<Present>();
         private DirectoryInfo imagesFolder = new DirectoryInfo(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString() + "\\Images\\");
         private int position;
 
@@ -59,7 +59,7 @@ namespace Example
             //PlayingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
             PopulatePesentImageList();
             int startLeftPosition = -50, startTopPosition = 20;
-            foreach (var image in lstPresentImages)
+            foreach (var image in lstPresentImg)
             {
                 imgCanvas.Children.Add(image.ImageObject);
                 Canvas.SetTop(image.ImageObject, startTopPosition);
@@ -73,20 +73,19 @@ namespace Example
         }
 
         private void PopulatePesentImageList()
-        {                        
+        {
+            int id = 0;    
             foreach (var file in imagesFolder.GetFiles("*.*"))
             {
-                Present p = new Present(file);                
-                lstPresentImages.Add(p);
+                Present p = new Present(file);
+                lstPresentImg.Add(p);
             }
-        }
-
-        
+        }       
 
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            foreach (var present in lstPresentImages)
+            foreach (var present in lstPresentImg)
             {
                 Canvas.SetLeft(present.ImageObject, present.MovementSpeed);
                 present.MovementSpeed++;
@@ -215,29 +214,49 @@ namespace Example
             ScoringWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
             ScoringWindow.Width = SystemParameters.PrimaryScreenWidth / 2;
             ScoringWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
-
-            List<string> presents = new List<string>() {"Ball", "Bike", "Phone", "Laptop" };
-            lstPresents.ItemsSource = presents;
-
-            imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "sleigh.png"));
-            
+            //lstPresents.ItemsSource = Present.lstPresentImages;
+            imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "sleigh.png"));            
         }
 
-        #endregion
+        #endregion        
+
+        private void imgSleigh_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(String)))
+            {
+                e.Effects = DragDropEffects.Copy;
+                string presentDropped = e.Data.GetData(typeof(String)).ToString();
+
+                //If Santas list contins the present dropped remove this Presnt from santas list
+                if (Present.lstPresentImages.Contains(presentDropped))
+                {
+                    Present.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
+                    Present pToRemove =null;
+                    foreach (var i in lstPresentImg)
+                    {
+                        if (i.ImageObject.Source.ToString().Contains(presentDropped.ToLower().Replace(" ","")))
+                        {
+                            pToRemove = i;
+                        }
+                    }
+
+                    if(pToRemove != null)
+                    lstPresentImg.Remove(pToRemove);
+                    imgCanvas.Children.Remove(pToRemove.ImageObject);
+                    
+                    //lstPresents.ItemsSource = Present.lstPresentImages;
+                        //Present.lstPresentImages.IndexOf(presentDropped)
+                }
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }               
+        }
 
         private void MenuItemExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void imgSleigh_Drop(object sender, DragEventArgs e)
-        {
-            ImageSource image = e.Data.GetData(typeof(ImageSource)) as ImageSource;
-            Image imageControl = new Image() { Width = image.Width, Height = image.Height, Source = image };
-            {
-                //e.Effects = DragDropEffects.Copy;
-                MessageBox.Show(e.Source.ToString());
-            }
         }
 
         
