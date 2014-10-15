@@ -107,6 +107,7 @@
     <Compile Include="Controls\ExampleControl.xaml.cs">
       <DependentUpon>ExampleControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Player.cs" />
     <Compile Include="Present.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -143,10 +144,21 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\football.png" />
+    <Resource Include="Images\Backgrounds\reindeer.jpg" />
+    <Resource Include="Images\Backgrounds\santa.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\sleigh.png" />
+    <Resource Include="Images\Backgrounds\background.jpg" />
+    <Resource Include="Images\bicycle.png" />
+    <Resource Include="Images\football.png" />
+    <Resource Include="Images\phone.png" />
+    <Resource Include="Images\rockinghorse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Backgrounds\santa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Backgrounds\sleigh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -32,8 +32,7 @@ namespace Example
 
             //Container.Children.Add(new MdiChild
             //{
-            //    Title = "Empty Window Using Code",
-            //    Icon = new BitmapImage(new Uri("OriginalLogo.png", UriKind.Relative))
+            //    Name = "startScreen"
             //});
 
             //Container.Children.Add(new MdiChild
@@ -55,8 +54,19 @@ namespace Example
         private void PlayingWindow_Loaded(object sender, RoutedEventArgs e)
         {
             PlayingWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
-            PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2;
+            PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2 + SystemParameters.PrimaryScreenWidth / 6;
             //PlayingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
+
+            ImageBrush backgroundImg = new ImageBrush();
+            backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background.jpg"));//, UriKind.Relative));
+            backgroundImg.Stretch = Stretch.UniformToFill;
+            backgroundImg.AlignmentX = AlignmentX.Left ;
+            imgCanvas.Background = backgroundImg;
+
+            imgSanta.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "santa.png"));
+            Canvas.SetBottom(imgSanta, 5);
+            Canvas.SetRight(imgSanta, 5);
+
             PopulatePesentImageList();
             int startLeftPosition = -50, startTopPosition = 20;
             foreach (var image in lstPresentImg)
@@ -207,18 +217,20 @@ namespace Example
 
 		#endregion
 
-        #region Scoring Window
-
         private void ScoringWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ScoringWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
-            ScoringWindow.Width = SystemParameters.PrimaryScreenWidth / 2;
+            ScoringWindow.Width = SystemParameters.PrimaryScreenWidth / 2 - SystemParameters.PrimaryScreenWidth / 6;
             ScoringWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
             //lstPresents.ItemsSource = Present.lstPresentImages;
-            imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "sleigh.png"));            
-        }
+            ImageBrush backgroundImg = new ImageBrush();
+            backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background.jpg"));//, UriKind.Relative));
+            backgroundImg.Stretch = Stretch.UniformToFill;
+            backgroundImg.AlignmentX = AlignmentX.Right;
+            ScoringWindow.Background = backgroundImg;
+            imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "sleigh.png"));            
 
-        #endregion        
+        }
 
         private void imgSleigh_Drop(object sender, DragEventArgs e)
         {
@@ -230,7 +242,12 @@ namespace Example
                 //If Santas list contins the present dropped remove this Presnt from santas list
                 if (Present.lstPresentImages.Contains(presentDropped))
                 {
+                    
                     Present.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
+
+                    //Find the present that needs to be removed
+                    //Remove it from the list of presents
+                    //Remove it from the xaml
                     Present pToRemove =null;
                     foreach (var i in lstPresentImg)
                     {
@@ -243,9 +260,6 @@ namespace Example
                     if(pToRemove != null)
                     lstPresentImg.Remove(pToRemove);
                     imgCanvas.Children.Remove(pToRemove.ImageObject);
-                    
-                    //lstPresents.ItemsSource = Present.lstPresentImages;
-                        //Present.lstPresentImages.IndexOf(presentDropped)
                 }
             }
             else
@@ -257,6 +271,11 @@ namespace Example
         private void MenuItemExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void StartupWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
 
         
