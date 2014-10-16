@@ -24,6 +24,10 @@ namespace Example
         private List<Present> lstPresentImg = new List<Present>();
         private DirectoryInfo imagesFolder = new DirectoryInfo(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString() + "\\Images\\");
         private int position;
+        private Player currentPlayer;
+        private Button btnStartNewGame;
+        private TextBox tbxPlayerName;
+        private List<Level> levels = new List<Level>();
 
 		public Main()
 		{
@@ -47,8 +51,67 @@ namespace Example
 
         private void ContainerWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            ImageBrush backgroundImg = new ImageBrush();
+            backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_Container.jpg"));
+            backgroundImg.Stretch = Stretch.Uniform;
+            Container.Background = backgroundImg;
             timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = new TimeSpan(0, 0, 0, 0 ,100);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+        }
+
+        private void StartupWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            StartupWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height/2);
+            Canvas.SetZIndex(StartupWindow, 2);
+            StartupWindow.Width = 350;
+            StartupWindow.Height = 350;
+            TextBox tbxPlayerName = new TextBox() { FontSize = 27, Width = 150 };
+            PopulateListLevels();
+        }
+
+        private void PopulateListLevels()
+        {
+            levels.Add(new Level(1, 0, imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));
+        }
+
+        private void btnNewGame_Click(object sender, RoutedEventArgs e)
+        {
+            btnNewGame.Visibility = Visibility.Hidden;
+            btnLoadGame.Visibility = Visibility.Hidden;
+            spStartupWindow.Children.Remove(btnNewGame);
+            spStartupWindow.Children.Remove(btnLoadGame);
+            Label lblName = new Label() {Content="Name", FontSize=30, HorizontalAlignment=HorizontalAlignment.Center };
+            spStartupWindow.Children.Add(lblName);
+            tbxPlayerName = new TextBox() {FontSize=27, Width=150};
+            tbxPlayerName.TextChanged += tbxPlayerName_TextChanged;
+            spStartupWindow.Children.Add(tbxPlayerName);
+            btnStartNewGame = new Button() { Content = "Start", Margin = new Thickness(20, 50,20,0), FontSize = 30 };
+            btnStartNewGame.Click +=btnStartNewGame_Click;
+            spStartupWindow.Children.Add(btnStartNewGame);
+            btnStartNewGame.IsEnabled = false;
+            currentPlayer = new Player(tbxPlayerName.Text, 0,0);            
+        }        
+
+        void tbxPlayerName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbxPlayerName.Text))
+                btnStartNewGame.IsEnabled = false;
+            else
+                btnStartNewGame.IsEnabled = true;
+        }
+
+        private void btnStartNewGame_Click(object sender, RoutedEventArgs e)
+        {
+            PlayingWindow_Loaded(sender, e);
+            ScoringWindow_Loaded(sender, e);
+            PlayingWindow.Visibility = Visibility.Visible;
+            ScoringWindow.Visibility = Visibility.Visible;
+            StartupWindow.Close();
+        }
+
+        private void btnLoadGame_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void PlayingWindow_Loaded(object sender, RoutedEventArgs e)
@@ -57,11 +120,12 @@ namespace Example
             PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2 + SystemParameters.PrimaryScreenWidth / 6;
             //PlayingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
 
-            ImageBrush backgroundImg = new ImageBrush();
-            backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background.jpg"));//, UriKind.Relative));
-            backgroundImg.Stretch = Stretch.UniformToFill;
-            backgroundImg.AlignmentX = AlignmentX.Left ;
-            imgCanvas.Background = backgroundImg;
+            //ImageBrush backgroundImg = new ImageBrush();
+            //backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
+            //backgroundImg.Stretch = Stretch.UniformToFill;
+            //backgroundImg.AlignmentX = AlignmentX.Left;
+            imgCanvas.Background = levels[currentPlayer.LevelsCompleted].BackgroundPlayingWindow;
+            //imgCanvas.Background = backgroundImg;
 
             imgSanta.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "santa.png"));
             Canvas.SetBottom(imgSanta, 5);
@@ -222,13 +286,15 @@ namespace Example
             ScoringWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
             ScoringWindow.Width = SystemParameters.PrimaryScreenWidth / 2 - SystemParameters.PrimaryScreenWidth / 6;
             ScoringWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
-            //lstPresents.ItemsSource = Present.lstPresentImages;
-            ImageBrush backgroundImg = new ImageBrush();
-            backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background.jpg"));//, UriKind.Relative));
-            backgroundImg.Stretch = Stretch.UniformToFill;
-            backgroundImg.AlignmentX = AlignmentX.Right;
-            ScoringWindow.Background = backgroundImg;
-            imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "sleigh.png"));            
+            Canvas.SetZIndex(ScoringWindow, 1);
+            ScoringWindow.Background = levels[currentPlayer.LevelsCompleted].BackgroundScoringWindow;
+            //ImageBrush backgroundImg = new ImageBrush();
+            //backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background.jpg"));//, UriKind.Relative));
+            //backgroundImg.Stretch = Stretch.UniformToFill;
+            //backgroundImg.AlignmentX = AlignmentX.Right;
+            //ScoringWindow.Background = backgroundImg;
+            imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "sleigh.png"));
+            lblScore.Content = currentPlayer.Score.ToString();
 
         }
 
@@ -273,10 +339,9 @@ namespace Example
             this.Close();
         }
 
-        private void StartupWindow_Loaded(object sender, RoutedEventArgs e)
-        {
+        
 
-        }
+        
 
         
 

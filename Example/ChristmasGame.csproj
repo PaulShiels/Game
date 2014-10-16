@@ -98,6 +98,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Level.cs" />
     <Compile Include="Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -148,7 +149,6 @@
     <Resource Include="Images\Backgrounds\santa.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Backgrounds\background.jpg" />
     <Resource Include="Images\bicycle.png" />
     <Resource Include="Images\football.png" />
     <Resource Include="Images\phone.png" />
@@ -159,6 +159,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Backgrounds\sleigh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Backgrounds\background_Container.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Backgrounds\background_L1.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

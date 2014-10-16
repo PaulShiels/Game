@@ -23,7 +23,7 @@
                 </Menu>
             </mdi:MdiContainer.Menu>
 
-            <mdi:MdiChild Name="PlayingWindow" Title="Playing Area" Loaded="PlayingWindow_Loaded" >
+            <mdi:MdiChild Name="PlayingWindow" Visibility="Hidden" Title="Playing Area" >
                 <Grid>
                     <Canvas Name="imgCanvas">
                         <Image Name="imgSanta"></Image>
@@ -31,12 +31,15 @@
                 </Grid>
             </mdi:MdiChild>
             
-            <mdi:MdiChild Name="StartupWindow" Loaded="StartupWindow_Loaded">
-                <Grid>
-                </Grid>
+            <mdi:MdiChild Name="StartupWindow"  Loaded="StartupWindow_Loaded" WindowState="Normal">
+                <StackPanel Name="spStartupWindow">
+                    <Button Name="btnNewGame" Margin="10,5" FontSize="35" Click="btnNewGame_Click">New Game</Button>
+                    <Button Name="btnLoadGame" Margin="10,5" FontSize="35" Click="btnLoadGame_Click">Load Game</Button>
+                    
+                </StackPanel>
             </mdi:MdiChild>
             
-            <mdi:MdiChild  Name="ScoringWindow"  Title="Scoring Area" Loaded="ScoringWindow_Loaded" Icon="OriginalLogo.png">
+            <mdi:MdiChild Visibility="Hidden" Name="ScoringWindow"  Title="Scoring Area" Icon="OriginalLogo.png">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
