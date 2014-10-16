@@ -4,6 +4,7 @@
     xmlns:mdi="clr-namespace:WPF.MDI;assembly=WPF.MDI"
     Title="WPF.MDI Example" WindowState="Maximized" WindowStyle="None" Loaded="ContainerWindow_Loaded" 
         xmlns:my="clr-namespace:Example">
+    
     <DockPanel>        
         <mdi:MdiContainer Name="Container">
             <mdi:MdiContainer.Menu>
@@ -25,13 +26,13 @@
 
             <mdi:MdiChild Name="PlayingWindow" Visibility="Hidden" Title="Playing Area" >
                 <Grid>
-                    <Canvas Name="imgCanvas">
-                        <Image Name="imgSanta"></Image>
+                    <Canvas Name="imgCanvas" >
+                        <Image Name="imgSanta" ></Image>
                     </Canvas>
                 </Grid>
             </mdi:MdiChild>
             
-            <mdi:MdiChild Name="StartupWindow"  Loaded="StartupWindow_Loaded" WindowState="Normal">
+            <mdi:MdiChild Name="StartupWindow" Loaded="StartupWindow_Loaded" WindowState="Normal">
                 <StackPanel Name="spStartupWindow">
                     <Button Name="btnNewGame" Margin="10,5" FontSize="35" Click="btnNewGame_Click">New Game</Button>
                     <Button Name="btnLoadGame" Margin="10,5" FontSize="35" Click="btnLoadGame_Click">Load Game</Button>
@@ -59,7 +60,7 @@
                     </StackPanel>
                     <StackPanel Grid.Column="1" Opacity="0.8">
                         <Label Content="Score" HorizontalAlignment="Center" FontSize="55" FontFamily="Kristen ITC"></Label>
-                        <Label Name="lblScore" HorizontalAlignment="Center" FontSize="79" FontWeight="Bold" FontFamily="Kristen ITC">26</Label>
+                        <Label Name="lblScore" HorizontalAlignment="Center" FontSize="79" FontWeight="Bold" FontFamily="Kristen ITC"></Label>
                     </StackPanel>
                     <StackPanel Opacity="0.8" Background="#FFFFEFEF" Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
                         <Label Content="Correct:   " FontFamily="Kristen ITC" FontSize="30" Foreground="#FFF30000"></Label>

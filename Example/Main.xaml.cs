@@ -89,7 +89,8 @@ namespace Example
             btnStartNewGame.Click +=btnStartNewGame_Click;
             spStartupWindow.Children.Add(btnStartNewGame);
             btnStartNewGame.IsEnabled = false;
-            currentPlayer = new Player(tbxPlayerName.Text, 0,0);            
+            currentPlayer = new Player(tbxPlayerName.Text, 0,0);
+            PopulatePesentImageList();
         }        
 
         void tbxPlayerName_TextChanged(object sender, TextChangedEventArgs e)
@@ -118,20 +119,17 @@ namespace Example
         {
             PlayingWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
             PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2 + SystemParameters.PrimaryScreenWidth / 6;
-            //PlayingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
 
-            //ImageBrush backgroundImg = new ImageBrush();
-            //backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
-            //backgroundImg.Stretch = Stretch.UniformToFill;
-            //backgroundImg.AlignmentX = AlignmentX.Left;
-            imgCanvas.Background = levels[currentPlayer.LevelsCompleted].BackgroundPlayingWindow;
-            //imgCanvas.Background = backgroundImg;
+            ImageBrush backgroundImg = new ImageBrush();
+            backgroundImg.ImageSource = levels[currentPlayer.LevelsCompleted].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
+            backgroundImg.Stretch = Stretch.UniformToFill;
+            backgroundImg.AlignmentX = AlignmentX.Left;
+            imgCanvas.Background = backgroundImg;
 
             imgSanta.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "santa.png"));
             Canvas.SetBottom(imgSanta, 5);
             Canvas.SetRight(imgSanta, 5);
 
-            PopulatePesentImageList();
             int startLeftPosition = -50, startTopPosition = 20;
             foreach (var image in lstPresentImg)
             {
@@ -287,14 +285,14 @@ namespace Example
             ScoringWindow.Width = SystemParameters.PrimaryScreenWidth / 2 - SystemParameters.PrimaryScreenWidth / 6;
             ScoringWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
             Canvas.SetZIndex(ScoringWindow, 1);
-            ScoringWindow.Background = levels[currentPlayer.LevelsCompleted].BackgroundScoringWindow;
-            //ImageBrush backgroundImg = new ImageBrush();
-            //backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background.jpg"));//, UriKind.Relative));
-            //backgroundImg.Stretch = Stretch.UniformToFill;
-            //backgroundImg.AlignmentX = AlignmentX.Right;
-            //ScoringWindow.Background = backgroundImg;
+
+            ImageBrush backgroundImg = new ImageBrush();
+            backgroundImg.ImageSource = levels[currentPlayer.LevelsCompleted].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
+            backgroundImg.Stretch = Stretch.UniformToFill;
+            backgroundImg.AlignmentX = AlignmentX.Right;
+            ScoringWindow.Background = backgroundImg;
             imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "sleigh.png"));
-            lblScore.Content = currentPlayer.Score.ToString();
+            //lblScore.Content = currentPlayer.Score.ToString();
 
         }
 
@@ -308,7 +306,10 @@ namespace Example
                 //If Santas list contins the present dropped remove this Presnt from santas list
                 if (Present.lstPresentImages.Contains(presentDropped))
                 {
-                    
+                    currentPlayer.Score++;
+                    lblScore.Content = (Convert.ToInt32(lblScore.Content) + 1);
+                    lblCorrect.Content = Convert.ToInt32(lblCorrect.Content) + 1;
+
                     Present.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
 
                     //Find the present that needs to be removed
@@ -331,6 +332,10 @@ namespace Example
             else
             {
                 e.Effects = DragDropEffects.None;
+                if (Convert.ToInt32(lblScore.Content)>0)
+                lblScore.Content = (Convert.ToInt32(lblScore.Content) - 1);
+
+                lblCorrect.Content = Convert.ToInt32(lblIncorrect.Content) + 1;
             }               
         }
 
