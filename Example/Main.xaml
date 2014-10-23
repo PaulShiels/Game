@@ -27,6 +27,11 @@
             <mdi:MdiChild Name="PlayingWindow" Visibility="Hidden" Title="Playing Area" >
                 <Grid>
                     <Canvas Name="imgCanvas" >
+                        <StackPanel Name="spBtns" Orientation="Horizontal">
+                            <Button Name="btnQuit" FontSize="30" FontFamily="Kristen ITC" Content="Quit" Padding="10" Margin="10"></Button>
+                            <Button Name="btnLoad" FontSize="30" FontFamily="Kristen ITC" Content="Load" Padding="10" Margin="10" Click="btnLoadGame_Click"></Button>
+                            <Button Name="btnSaveGame" FontSize="30" FontFamily="Kristen ITC" Content="Save" Padding="10" Margin="10" Click="btnSaveGame_Click"></Button>
+                        </StackPanel>
                         <Image Name="imgSanta" ></Image>
                     </Canvas>
                 </Grid>
@@ -34,9 +39,9 @@
             
             <mdi:MdiChild Name="StartupWindow" Loaded="StartupWindow_Loaded" WindowState="Normal">
                 <StackPanel Name="spStartupWindow">
-                    <Button Name="btnNewGame" Margin="10,5" FontSize="35" Click="btnNewGame_Click">New Game</Button>
-                    <Button Name="btnLoadGame" Margin="10,5" FontSize="35" Click="btnLoadGame_Click">Load Game</Button>
-                    
+                    <Button Name="btnNewGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnNewGame_Click">New Game</Button>
+                    <Button Name="btnLoadGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnLoadGame_Click">Load Game</Button>
+                    <ListBox Name="lbxPlayers" Margin="10" DisplayMemberPath="Name" SelectionChanged="lbxPlayers_SelectionChanged"></ListBox>
                 </StackPanel>
             </mdi:MdiChild>
             
@@ -63,7 +68,7 @@
                         <Label Name="lblScore" HorizontalAlignment="Center" FontSize="79" FontWeight="Bold" FontFamily="Kristen ITC"></Label>
                     </StackPanel>
                     <StackPanel Opacity="0.8" Background="#FFFFEFEF" Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
-                        <Label Content="Correct:   " FontFamily="Kristen ITC" FontSize="30" Foreground="#FFF30000"></Label>
+                        <Label Content="Correct:   " FontFamily="Kristen ITC" FontSize="30" Foreground="#FFF30000" ></Label>
                         <Label Name="lblCorrect" FontFamily="Kristen ITC" FontSize="30" Foreground="#FFF30000"></Label>
                     </StackPanel>
                     <StackPanel Opacity="0.8" Background="#FFFFEFEF" Grid.Column="1" Grid.Row="2" Orientation="Horizontal">

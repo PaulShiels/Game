@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Data;
 namespace Example
 {
 	/// <summary>
@@ -24,6 +25,7 @@ namespace Example
         private List<Present> lstPresentImg = new List<Present>();
         private DirectoryInfo imagesFolder = new DirectoryInfo(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString() + "\\Images\\");
         private int position;
+        public List<Player> allPlayers = new List<Player>();
         private Player currentPlayer;
         private Button btnStartNewGame;
         private TextBox tbxPlayerName;
@@ -67,6 +69,8 @@ namespace Example
             StartupWindow.Height = 350;
             TextBox tbxPlayerName = new TextBox() { FontSize = 27, Width = 150 };
             PopulateListLevels();
+            allPlayers.Clear();
+            allPlayers = Player.Deserialize(allPlayers);
         }
 
         private void PopulateListLevels()
@@ -88,9 +92,7 @@ namespace Example
             btnStartNewGame = new Button() { Content = "Start", Margin = new Thickness(20, 50,20,0), FontSize = 30 };
             btnStartNewGame.Click +=btnStartNewGame_Click;
             spStartupWindow.Children.Add(btnStartNewGame);
-            btnStartNewGame.IsEnabled = false;
-            currentPlayer = new Player(tbxPlayerName.Text, 0,0);
-            PopulatePesentImageList();
+            btnStartNewGame.IsEnabled = false;            
         }        
 
         void tbxPlayerName_TextChanged(object sender, TextChangedEventArgs e)
@@ -103,6 +105,13 @@ namespace Example
 
         private void btnStartNewGame_Click(object sender, RoutedEventArgs e)
         {
+            if (currentPlayer == null)
+            {
+                currentPlayer = new Player(allPlayers.Count, tbxPlayerName.Text, 0, 0);
+                allPlayers.Add(currentPlayer);
+            }
+            allPlayers = Player.Deserialize(allPlayers);
+            PopulatePesentImageList();
             PlayingWindow_Loaded(sender, e);
             ScoringWindow_Loaded(sender, e);
             PlayingWindow.Visibility = Visibility.Visible;
@@ -111,8 +120,10 @@ namespace Example
         }
 
         private void btnLoadGame_Click(object sender, RoutedEventArgs e)
-        {
-
+        {            
+            spStartupWindow.Children.Remove(btnNewGame);
+            spStartupWindow.Children.Remove(btnLoadGame);
+            lbxPlayers.ItemsSource = allPlayers;
         }
 
         private void PlayingWindow_Loaded(object sender, RoutedEventArgs e)
@@ -126,6 +137,8 @@ namespace Example
             backgroundImg.AlignmentX = AlignmentX.Left;
             imgCanvas.Background = backgroundImg;
 
+            Canvas.SetBottom(spBtns, 5);
+            Canvas.SetLeft(spBtns, 5);
             imgSanta.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "santa.png"));
             Canvas.SetBottom(imgSanta, 5);
             Canvas.SetRight(imgSanta, 5);
@@ -292,7 +305,7 @@ namespace Example
             backgroundImg.AlignmentX = AlignmentX.Right;
             ScoringWindow.Background = backgroundImg;
             imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "sleigh.png"));
-            //lblScore.Content = currentPlayer.Score.ToString();
+            lblScore.Content = currentPlayer.Score.ToString();
 
         }
 
@@ -342,6 +355,20 @@ namespace Example
         private void MenuItemExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void btnSaveGame_Click(object sender, RoutedEventArgs e)
+        {
+            if (allPlayers.Count > currentPlayer.PlayerId)
+                allPlayers.RemoveAt(currentPlayer.PlayerId);
+            allPlayers.Add(currentPlayer);
+            Player.Serialize(allPlayers);
+        }
+
+        private void lbxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            currentPlayer = (Player)lbxPlayers.SelectedItem;
+            btnStartNewGame_Click(sender, e);
         }
 
         
