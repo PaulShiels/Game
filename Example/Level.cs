@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,14 @@ using System.Windows.Media.Imaging;
 
 namespace Example
 {
-    class Level
+    public class Level
     {
         public int LevelId { get; set; }
         public int ScoreboardScore { get; set; }
         public ImageBrush BackgroundImage { get; set; }
+        public static ObservableCollection<string> lstPresentImages = new ObservableCollection<string>();
+        
+
 
         public Level(int levelId, int score,  string backgroundImageSource)
         {

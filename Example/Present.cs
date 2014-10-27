@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,10 +19,10 @@ namespace Example
         public int PresentId;
         public string Type { get; set; }
         public bool BeingDragged { get; set; }
-        public int MovementSpeed { get; set; }
+        public double MovementSpeed { get; set; }
         public Image ImageObject { get; set; }
-
-        public static ObservableCollection<string> lstPresentImages = new ObservableCollection<string>() { "Bicycle", "Football", "Phone", "Rocking Horse" };
+        public double xAxisPosition { get; set; }
+               
 
         public Present(FileInfo imageFile)
         {
@@ -52,16 +53,18 @@ namespace Example
             BeingDragged = true;
         }
 
-        private int GetRandomSpeed()
+        private double GetRandomSpeed()
         {
+            //Random delay = new Random();
+            Thread.Sleep(250);
             Random rnd = new Random();
-            return rnd.Next(5, 25);
+            return rnd.Next(4,7);
         }
 
-        private string GetPresentType(ImageSource imageSource)
+        public string GetPresentType(ImageSource imageSource)
         {
             //Check if the image path contains the name of any Presents in the list of Presents.
-            foreach (var present in lstPresentImages)
+            foreach (var present in Level.lstPresentImages)
             {
                 if (imageSource.ToString().Contains(Regex.Replace(present.ToLower(), @"\s+", "")))
                 {

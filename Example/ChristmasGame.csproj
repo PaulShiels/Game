@@ -149,12 +149,6 @@
     <Resource Include="Images\Backgrounds\santa.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\bicycle.png" />
-    <Resource Include="Images\football.png" />
-    <Resource Include="Images\phone.png" />
-    <Resource Include="Images\rockinghorse.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Backgrounds\santa.png" />
   </ItemGroup>
   <ItemGroup>

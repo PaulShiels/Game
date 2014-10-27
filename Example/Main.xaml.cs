@@ -30,6 +30,8 @@ namespace Example
         private Button btnStartNewGame;
         private TextBox tbxPlayerName;
         private List<Level> levels = new List<Level>();
+        private List<string> lstAllPresents = new List<string>() { "Bicycle", "Football", "Phone", "Rocking Horse", "Book", "Rubber Duck", "Dinosaur", "Aeroplane", "Teddy", "Rc Car", "Laptop" };
+        private double presentSpeed = 0;
 
 		public Main()
 		{
@@ -75,15 +77,19 @@ namespace Example
 
         private void PopulateListLevels()
         {
-            levels.Add(new Level(1, 0, imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));
+            levels.Add(new Level(1, 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L1.jpg"));
+            levels.Add(new Level(2, 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L2.jpg"));
         }
 
         private void btnNewGame_Click(object sender, RoutedEventArgs e)
         {
             btnNewGame.Visibility = Visibility.Hidden;
             btnLoadGame.Visibility = Visibility.Hidden;
-            spStartupWindow.Children.Remove(btnNewGame);
-            spStartupWindow.Children.Remove(btnLoadGame);
+            //spStartupWindow.Children.Remove(btnNewGame);
+            //spStartupWindow.Children.Remove(btnLoadGame);
+            btnNewGame.Content = null;
+            btnLoadGame.Content = null;
+            lbxPlayers.ItemsSource = null;
             Label lblName = new Label() {Content="Name", FontSize=30, HorizontalAlignment=HorizontalAlignment.Center };
             spStartupWindow.Children.Add(lblName);
             tbxPlayerName = new TextBox() {FontSize=27, Width=150};
@@ -92,7 +98,8 @@ namespace Example
             btnStartNewGame = new Button() { Content = "Start", Margin = new Thickness(20, 50,20,0), FontSize = 30 };
             btnStartNewGame.Click +=btnStartNewGame_Click;
             spStartupWindow.Children.Add(btnStartNewGame);
-            btnStartNewGame.IsEnabled = false;            
+            btnStartNewGame.IsEnabled = false;
+            btnBack.Visibility = Visibility.Visible;
         }        
 
         void tbxPlayerName_TextChanged(object sender, TextChangedEventArgs e)
@@ -104,7 +111,7 @@ namespace Example
         }
 
         private void btnStartNewGame_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             if (currentPlayer == null)
             {
                 currentPlayer = new Player(allPlayers.Count, tbxPlayerName.Text, 0, 0);
@@ -116,14 +123,38 @@ namespace Example
             ScoringWindow_Loaded(sender, e);
             PlayingWindow.Visibility = Visibility.Visible;
             ScoringWindow.Visibility = Visibility.Visible;
-            StartupWindow.Close();
+            StartupWindow.Visibility = Visibility.Hidden;
         }
 
         private void btnLoadGame_Click(object sender, RoutedEventArgs e)
-        {            
-            spStartupWindow.Children.Remove(btnNewGame);
-            spStartupWindow.Children.Remove(btnLoadGame);
+        {
+            StartupWindow.Visibility = Visibility.Visible;
+            lbxPlayers.Visibility = System.Windows.Visibility.Visible;
+            //spStartupWindow.Children.Remove(btnNewGame);
+            //spStartupWindow.Children.Remove(btnLoadGame);
+            btnNewGame.Visibility = System.Windows.Visibility.Hidden;
+            btnLoadGame.Visibility = System.Windows.Visibility.Hidden;
+            btnNewGame.Content = null;
+            btnLoadGame.Content = null;
+            //if(lbxPlayers.SelectedItem!=null)  
+            //lbxPlayers.UnselectAll();
+            if (lbxPlayers.ItemsSource==null)
             lbxPlayers.ItemsSource = allPlayers;
+            btnBack.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            if(spStartupWindow.Children.Count==6)
+            {
+                spStartupWindow.Children.RemoveRange(3,3);
+            }
+            lbxPlayers.Visibility = System.Windows.Visibility.Hidden;
+            btnNewGame.Visibility = System.Windows.Visibility.Visible;
+            btnLoadGame.Visibility = System.Windows.Visibility.Visible;
+            btnNewGame.Content = "New Game";
+            btnLoadGame.Content = "Load Game";
+            btnBack.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void PlayingWindow_Loaded(object sender, RoutedEventArgs e)
@@ -132,25 +163,50 @@ namespace Example
             PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2 + SystemParameters.PrimaryScreenWidth / 6;
 
             ImageBrush backgroundImg = new ImageBrush();
-            backgroundImg.ImageSource = levels[currentPlayer.LevelsCompleted].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
+            backgroundImg.ImageSource = levels[currentPlayer.LevelsCompleted + 1].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
             backgroundImg.Stretch = Stretch.UniformToFill;
             backgroundImg.AlignmentX = AlignmentX.Left;
             imgCanvas.Background = backgroundImg;
 
+            //Set the position of the quit and load game buttons
             Canvas.SetBottom(spBtns, 5);
             Canvas.SetLeft(spBtns, 5);
+
+            //Add the image of santa and set the position
             imgSanta.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "santa.png"));
             Canvas.SetBottom(imgSanta, 5);
             Canvas.SetRight(imgSanta, 5);
 
-            int startLeftPosition = -50, startTopPosition = 20;
+            Random rndStartLeftPosition = new Random(), rndStartTopPosition = new Random();
+            int lastImgLeftPos=0, lastImgTopPos=0, differenceTop=0, differenceLeft=0;
+            //int startLeftPosition = -50, startTopPosition = 20;
             foreach (var image in lstPresentImg)
             {
-                imgCanvas.Children.Add(image.ImageObject);
-                Canvas.SetTop(image.ImageObject, startTopPosition);
-                Canvas.SetLeft(image.ImageObject, startLeftPosition);
-                startTopPosition += 80;
-                startLeftPosition -= 30;
+                cnvsPresents.Children.Add(image.ImageObject);
+                //imgCanvas.Children.Add(image.ImageObject);
+                differenceTop = 0;
+                differenceLeft = 0;
+
+                int newTopPos=0;
+                while (differenceTop < 50)
+                {
+                    newTopPos = rndStartTopPosition.Next(5, 270);
+                    differenceTop = Math.Abs(newTopPos - lastImgTopPos);
+                }
+                Canvas.SetTop(image.ImageObject, newTopPos);
+
+                int newLeftPos = 0;
+                while (differenceLeft < 50)
+                {
+                    newLeftPos = rndStartLeftPosition.Next(-780, -90);
+                    differenceLeft = Math.Abs(newLeftPos - lastImgLeftPos);
+                }
+                Canvas.SetLeft(image.ImageObject, newLeftPos);
+                image.xAxisPosition = newLeftPos;
+                lastImgTopPos = newTopPos;
+                lastImgLeftPos = newLeftPos;
+                //startTopPosition += 80;
+                //startLeftPosition -= 30;
             }           
 
             //MessageBox.Show(imgBall)
@@ -170,10 +226,15 @@ namespace Example
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            
             foreach (var present in lstPresentImg)
-            {
-                Canvas.SetLeft(present.ImageObject, present.MovementSpeed);
-                present.MovementSpeed++;
+            {                
+                Point relativePoint = present.ImageObject.TransformToAncestor(PlayingWindow).Transform(new Point(0, 0));
+                //double speed = relativePoint.X + present.MovementSpeed;
+                //present.xAxisPosition = relativePoint.X - present.MovementSpeed;
+                present.xAxisPosition += present.MovementSpeed;
+                Canvas.SetLeft(present.ImageObject, present.xAxisPosition);
+                
             }
             
         }
@@ -317,13 +378,13 @@ namespace Example
                 string presentDropped = e.Data.GetData(typeof(String)).ToString();
 
                 //If Santas list contins the present dropped remove this Presnt from santas list
-                if (Present.lstPresentImages.Contains(presentDropped))
+                if (Level.lstPresentImages.Contains(presentDropped))
                 {
                     currentPlayer.Score++;
                     lblScore.Content = (Convert.ToInt32(lblScore.Content) + 1);
                     lblCorrect.Content = Convert.ToInt32(lblCorrect.Content) + 1;
 
-                    Present.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
+                    Level.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
 
                     //Find the present that needs to be removed
                     //Remove it from the list of presents
@@ -339,7 +400,8 @@ namespace Example
 
                     if(pToRemove != null)
                     lstPresentImg.Remove(pToRemove);
-                    imgCanvas.Children.Remove(pToRemove.ImageObject);
+                    cnvsPresents.Children.Remove(pToRemove.ImageObject);
+                    //imgCanvas.Children.Remove(pToRemove.ImageObject);
                 }
             }
             else
@@ -366,10 +428,35 @@ namespace Example
         }
 
         private void lbxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        {            
             currentPlayer = (Player)lbxPlayers.SelectedItem;
+
+            if(currentPlayer!=null)
             btnStartNewGame_Click(sender, e);
         }
+
+        private void btnQuit_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to quit? Any unsaved changes will be lost.", "Quit", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                currentPlayer = null;
+                cnvsPresents.Children.RemoveRange(0, cnvsPresents.Children.Count);
+                lstPresentImg.Clear();
+                ScoringWindow.Visibility = Visibility.Hidden;
+                PlayingWindow.Visibility = Visibility.Hidden;
+                StartupWindow.Visibility = Visibility.Visible;
+                lbxPlayers.SelectedIndex = -1;
+                btnBack_Click(sender, e);
+            }
+            else
+            {
+                timer.Start();
+            }
+        }
+
+        
 
         
 
