@@ -27,7 +27,8 @@
             <mdi:MdiChild Name="PlayingWindow" Visibility="Hidden" Title="Playing Area" >
                 <Grid>
                     <Canvas Name="imgCanvas" >
-                        <Canvas Name="cnvsPresents"></Canvas>
+                        <Canvas Name="cnvsPresents" >
+                        </Canvas>
                         <StackPanel Name="spBtns" Orientation="Horizontal">
                             <Button Name="btnQuit" FontSize="30" FontFamily="Kristen ITC" Content="Quit" Padding="10" Margin="10" Click="btnQuit_Click"></Button>
                             <!--<Button Name="btnLoad" FontSize="30" FontFamily="Kristen ITC" Content="Load" Padding="10" Margin="10" Click="btnLoadGame_Click"></Button>-->
@@ -40,15 +41,23 @@
             
             <mdi:MdiChild Name="StartupWindow" Loaded="StartupWindow_Loaded" WindowState="Normal">
                 <DockPanel>
-                <StackPanel DockPanel.Dock="Top" Name="spStartupWindow">
-                    <Button Name="btnNewGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnNewGame_Click">New Game</Button>
-                    <Button Name="btnLoadGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnLoadGame_Click">Load Game</Button>
-                    <ListBox Name="lbxPlayers" Margin="10" DisplayMemberPath="Name" FontSize="18" FontFamily="Kristen ITC" SelectionChanged="lbxPlayers_SelectionChanged" Visibility="Hidden"></ListBox>
-                </StackPanel>
-                <Button Name="btnBack" DockPanel.Dock="Bottom" Margin="10,5" FontFamily="Kristen ITC" MaxHeight="45" FontSize="28" Click="btnBack_Click"  Visibility="Hidden">Back</Button>
+                    <StackPanel DockPanel.Dock="Top" Name="spStartupWindow">
+                        <Button Name="btnNewGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnNewGame_Click">New Game</Button>
+                        <Button Name="btnLoadGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnLoadGame_Click">Load Game</Button>
+                        <Button Name="btnExit" Margin="10,120,10,0" FontFamily="Kristen ITC" FontSize="35" Click="btnExit_Click">Exit</Button>
+                        <ListBox Name="lbxPlayers" Margin="10" DisplayMemberPath="Name" FontSize="18" FontFamily="Kristen ITC" SelectionChanged="lbxPlayers_SelectionChanged" Visibility="Hidden"></ListBox>
+                    </StackPanel>
+                    <Button Name="btnBack" DockPanel.Dock="Bottom" Margin="10,5" FontFamily="Kristen ITC" MaxHeight="45" FontSize="28" Click="btnBack_Click"  Visibility="Hidden">Back</Button>
                 </DockPanel>
             </mdi:MdiChild>
-            
+
+            <mdi:MdiChild Name="LoadingWindow" Loaded="LoadingWindow_Loaded" Visibility="Hidden" Width="350" Height="200"  WindowState="Normal">
+                <StackPanel Orientation="Horizontal" Name="spLoadingWindow" >
+                    <Label Content="Loading..." FontSize="28" Margin="10" VerticalAlignment="Center" FontFamily="Kristen ITC" ></Label>
+                    <Image Name="imgLoading" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5, 0.5"></Image>
+                </StackPanel>
+            </mdi:MdiChild>
+
             <mdi:MdiChild Visibility="Hidden" Name="ScoringWindow"  Title="Scoring Area" Icon="OriginalLogo.png">
 
                 <Grid>
@@ -65,8 +74,9 @@
 
                     <StackPanel Name="spList" Margin="10" Opacity="0.7" Grid.RowSpan="3"  Background="#FFF6F9E1">
                         <Label Content="Santa's List" HorizontalContentAlignment="Center" Foreground="#FF972200" FontFamily="Snap ITC" FontSize="22"/>
-                        <ItemsControl Name="lstPresents" Margin="5, 0" Foreground="#FFF30000" ItemsSource="{x:Static my:Level.lstPresentImages}" BorderThickness="0" FontFamily="Tempus Sans ITC" FontSize="18"/>
+                        <ItemsControl Name="lstPresents" Margin="5, 0" Foreground="#FFF30000"  BorderThickness="0" FontFamily="Tempus Sans ITC" FontSize="18"/>
                     </StackPanel>
+                    <!--ItemsSource="{x:Static my:Level.lstPresentImages}"-->
                     <StackPanel Grid.Column="1" Opacity="0.8">
                         <Label Content="Score" HorizontalAlignment="Center" FontSize="55" FontFamily="Kristen ITC"></Label>
                         <Label Name="lblScore" HorizontalAlignment="Center" FontSize="79" FontWeight="Bold" FontFamily="Kristen ITC"></Label>

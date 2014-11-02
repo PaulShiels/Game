@@ -22,19 +22,26 @@ namespace Example
         public double MovementSpeed { get; set; }
         public Image ImageObject { get; set; }
         public double xAxisPosition { get; set; }
-               
+        public double yAxisPosition { get; set; }               
 
         public Present(FileInfo imageFile)
         {
             ImageObject = CreateImageObject(imageFile);
             MovementSpeed = GetRandomSpeed();
+            this.Type = GetPresentType(ImageObject.Source);
         }
 
         private Image CreateImageObject(FileInfo imageFile)
         {
             //Create the image object and set the properties
             Image i = new Image();
-            i.Name = imageFile.Name.ToLower().Remove(imageFile.Name.IndexOf('.'), 4);
+            string imageFileName;
+            //Remove the file extension
+            imageFileName = imageFile.Name.ToLower().Remove(imageFile.Name.Length - imageFile.Extension.Length, imageFile.Extension.Length);//.Remove(imageFile.Name.IndexOf('.'), 4); 
+            //Remove any white space
+            //if (imageFileName.Contains(" "))
+            //imageFileName = imageFileName.Remove(imageFileName.IndexOf(" "),1);
+            i.Name = imageFileName;
             i.Source = new BitmapImage(new Uri(imageFile.FullName));            
             i.MouseDown += new MouseButtonEventHandler(imgPresent_MouseDown);
 
@@ -56,9 +63,9 @@ namespace Example
         private double GetRandomSpeed()
         {
             //Random delay = new Random();
-            Thread.Sleep(250);
+            //Thread.Sleep(250);
             Random rnd = new Random();
-            return rnd.Next(4,7);
+            return rnd.Next(2,8);
         }
 
         public string GetPresentType(ImageSource imageSource)

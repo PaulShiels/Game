@@ -10,6 +10,9 @@ using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Data;
+using System.Linq;
+using System.Collections.ObjectModel;
+
 namespace Example
 {
 	/// <summary>
@@ -21,7 +24,7 @@ namespace Example
 		/// Initializes a new instance of the <see cref="Main"/> class.
 		/// </summary>
 
-        DispatcherTimer timer = new DispatcherTimer();
+        DispatcherTimer timer = new DispatcherTimer(), loadingTimer = new DispatcherTimer();
         private List<Present> lstPresentImg = new List<Present>();
         private DirectoryInfo imagesFolder = new DirectoryInfo(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString() + "\\Images\\");
         private int position;
@@ -31,7 +34,7 @@ namespace Example
         private TextBox tbxPlayerName;
         private List<Level> levels = new List<Level>();
         private List<string> lstAllPresents = new List<string>() { "Bicycle", "Football", "Phone", "Rocking Horse", "Book", "Rubber Duck", "Dinosaur", "Aeroplane", "Teddy", "Rc Car", "Laptop" };
-        private double presentSpeed = 0;
+        private RotateTransform imgLoadTransform = new RotateTransform();
 
 		public Main()
 		{
@@ -61,6 +64,14 @@ namespace Example
             Container.Background = backgroundImg;
             timer.Tick += new EventHandler(timer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            loadingTimer.Tick+= new EventHandler(loadingTimer_Tick);
+            loadingTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+        }
+
+        private void loadingTimer_Tick(object sender, EventArgs e)
+        {
+            imgLoadTransform.Angle += 5;
+            imgLoading.RenderTransform = imgLoadTransform; 
         }
 
         private void StartupWindow_Loaded(object sender, RoutedEventArgs e)
@@ -77,8 +88,14 @@ namespace Example
 
         private void PopulateListLevels()
         {
-            levels.Add(new Level(1, 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L1.jpg"));
-            levels.Add(new Level(2, 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L2.jpg"));
+            lstAllPresents.Clear();
+            foreach (var img in Directory.GetFiles(imagesFolder.ToString()))
+            {
+		        lstAllPresents.Add(Path.GetFileNameWithoutExtension(img));
+            }
+
+            levels.Add(new Level(1, 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L1.jpg", lstAllPresents));
+            //levels.Add(new Level(2, 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L2.jpg"));
         }
 
         private void btnNewGame_Click(object sender, RoutedEventArgs e)
@@ -163,7 +180,7 @@ namespace Example
             PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2 + SystemParameters.PrimaryScreenWidth / 6;
 
             ImageBrush backgroundImg = new ImageBrush();
-            backgroundImg.ImageSource = levels[currentPlayer.LevelsCompleted + 1].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
+            backgroundImg.ImageSource = levels[currentPlayer.LevelsCompleted].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
             backgroundImg.Stretch = Stretch.UniformToFill;
             backgroundImg.AlignmentX = AlignmentX.Left;
             imgCanvas.Background = backgroundImg;
@@ -172,44 +189,45 @@ namespace Example
             Canvas.SetBottom(spBtns, 5);
             Canvas.SetLeft(spBtns, 5);
 
+            //Add Presents to the list Santas List
+            foreach (var present in Level.lstPresentImages)
+            {
+                lstPresents.Items.Add(present);
+            }
+
             //Add the image of santa and set the position
             imgSanta.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "santa.png"));
             Canvas.SetBottom(imgSanta, 5);
             Canvas.SetRight(imgSanta, 5);
 
             Random rndStartLeftPosition = new Random(), rndStartTopPosition = new Random();
-            int lastImgLeftPos=0, lastImgTopPos=0, differenceTop=0, differenceLeft=0;
-            //int startLeftPosition = -50, startTopPosition = 20;
+            int lastImgLeftPos = 0, lastImgTopPos = 0, differenceTop = 0;
             foreach (var image in lstPresentImg)
             {
+                image.ImageObject.Height += 100;
+                image.ImageObject.Width += 100;
                 cnvsPresents.Children.Add(image.ImageObject);
-                //imgCanvas.Children.Add(image.ImageObject);
                 differenceTop = 0;
-                differenceLeft = 0;
 
-                int newTopPos=0;
-                while (differenceTop < 50)
+                int newTopPos = 0;
+                while (differenceTop < 100)
                 {
-                    newTopPos = rndStartTopPosition.Next(5, 270);
+                    newTopPos = rndStartTopPosition.Next(0, 400);
                     differenceTop = Math.Abs(newTopPos - lastImgTopPos);
                 }
                 Canvas.SetTop(image.ImageObject, newTopPos);
 
                 int newLeftPos = 0;
-                while (differenceLeft < 50)
                 {
-                    newLeftPos = rndStartLeftPosition.Next(-780, -90);
-                    differenceLeft = Math.Abs(newLeftPos - lastImgLeftPos);
+                    newLeftPos = lastImgLeftPos - 200; //rndStartLeftPosition.Next(-780, -90);
                 }
                 Canvas.SetLeft(image.ImageObject, newLeftPos);
                 image.xAxisPosition = newLeftPos;
+                image.yAxisPosition = newTopPos;
                 lastImgTopPos = newTopPos;
                 lastImgLeftPos = newLeftPos;
-                //startTopPosition += 80;
-                //startLeftPosition -= 30;
-            }           
+            }    
 
-            //MessageBox.Show(imgBall)
             timer.Start();
         }
 
@@ -226,7 +244,7 @@ namespace Example
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            
+            Present presentToRemove=null;
             foreach (var present in lstPresentImg)
             {                
                 Point relativePoint = present.ImageObject.TransformToAncestor(PlayingWindow).Transform(new Point(0, 0));
@@ -234,8 +252,17 @@ namespace Example
                 //present.xAxisPosition = relativePoint.X - present.MovementSpeed;
                 present.xAxisPosition += present.MovementSpeed;
                 Canvas.SetLeft(present.ImageObject, present.xAxisPosition);
-                
+
+                if (present.xAxisPosition >= PlayingWindow.Width)// || present.xAxisPosition<=ScoringWindow.Width+10)
+                {
+                    presentToRemove = present;
+                    cnvsPresents.Children.Remove(present.ImageObject);
+                    //present.xAxisPosition = -100;
+                    //Canvas.SetLeft(present.ImageObject, present.xAxisPosition);
+                }                
             }
+            if (presentToRemove != null)
+                lstPresentImg.Remove(presentToRemove);
             
         }
 
@@ -384,7 +411,7 @@ namespace Example
                     lblScore.Content = (Convert.ToInt32(lblScore.Content) + 1);
                     lblCorrect.Content = Convert.ToInt32(lblCorrect.Content) + 1;
 
-                    Level.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
+                    //Level.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
 
                     //Find the present that needs to be removed
                     //Remove it from the list of presents
@@ -392,16 +419,24 @@ namespace Example
                     Present pToRemove =null;
                     foreach (var i in lstPresentImg)
                     {
-                        if (i.ImageObject.Source.ToString().Contains(presentDropped.ToLower().Replace(" ","")))
+                        if (i.ImageObject.Source.ToString().ToLower().Contains(presentDropped.ToLower()))//.Replace(" ","")))
                         {
                             pToRemove = i;
                         }
                     }
 
-                    if(pToRemove != null)
-                    lstPresentImg.Remove(pToRemove);
+                    if (pToRemove != null)
+                    {
+                        lstPresents.Items.RemoveAt(lstPresents.Items.IndexOf(pToRemove.Type));
+                        lstPresentImg.Remove(pToRemove);
+                        Level.lstPresentImages.Remove(pToRemove.ToString());                        
+                    }
+                    else
+                    {
+                        cnvsPresents.Children.Remove(pToRemove.ImageObject);
+                        lblIncorrect.Content = Convert.ToInt32(lblIncorrect.Content)-1;
+                    }
                     cnvsPresents.Children.Remove(pToRemove.ImageObject);
-                    //imgCanvas.Children.Remove(pToRemove.ImageObject);
                 }
             }
             else
@@ -428,11 +463,17 @@ namespace Example
         }
 
         private void lbxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {            
+        {
+            StartupWindow.Visibility = Visibility.Hidden;
+            //LoadingWindow.Visibility = Visibility.Visible;
+            loadingTimer.Start();
             currentPlayer = (Player)lbxPlayers.SelectedItem;
 
             if(currentPlayer!=null)
-            btnStartNewGame_Click(sender, e);
+            {
+                
+                btnStartNewGame_Click(sender, e);
+            }
         }
 
         private void btnQuit_Click(object sender, RoutedEventArgs e)
@@ -446,9 +487,10 @@ namespace Example
                 lstPresentImg.Clear();
                 ScoringWindow.Visibility = Visibility.Hidden;
                 PlayingWindow.Visibility = Visibility.Hidden;
-                StartupWindow.Visibility = Visibility.Visible;
+                //StartupWindow.Visibility = Visibility.Visible;
                 lbxPlayers.SelectedIndex = -1;
                 btnBack_Click(sender, e);
+                StartupWindow.Visibility = Visibility.Visible;
             }
             else
             {
@@ -456,14 +498,16 @@ namespace Example
             }
         }
 
-        
+        private void LoadingWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadingWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height / 2);
+            Canvas.SetZIndex(StartupWindow, 2);
+            imgLoading.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "wreath.png"));
+        }
 
-        
-
-        
-
-        
-
-        
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
 	}
 }
