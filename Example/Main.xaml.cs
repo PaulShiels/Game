@@ -27,13 +27,12 @@ namespace Example
         DispatcherTimer timer = new DispatcherTimer(), loadingTimer = new DispatcherTimer();
         private List<Present> lstPresentImg = new List<Present>();
         private DirectoryInfo imagesFolder = new DirectoryInfo(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString() + "\\Images\\");
-        private int position;
         public List<Player> allPlayers = new List<Player>();
         private Player currentPlayer;
         private Button btnStartNewGame;
         private TextBox tbxPlayerName;
         private List<Level> levels = new List<Level>();
-        private List<string> lstAllPresents = new List<string>() { "Bicycle", "Football", "Phone", "Rocking Horse", "Book", "Rubber Duck", "Dinosaur", "Aeroplane", "Teddy", "Rc Car", "Laptop" };
+        private List<string> lstAllPresents = new List<string>();// { "Bicycle", "Football", "Phone", "Rocking Horse", "Book", "Rubber Duck", "Dinosaur", "Aeroplane", "Teddy", "Rc Car", "Laptop" };
         private RotateTransform imgLoadTransform = new RotateTransform();
 
 		public Main()
@@ -60,7 +59,7 @@ namespace Example
         {
             ImageBrush backgroundImg = new ImageBrush();
             backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_Container.jpg"));
-            backgroundImg.Stretch = Stretch.Uniform;
+            backgroundImg.Stretch = Stretch.UniformToFill;
             Container.Background = backgroundImg;
             timer.Tick += new EventHandler(timer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
@@ -133,6 +132,22 @@ namespace Example
             {
                 currentPlayer = new Player(allPlayers.Count, tbxPlayerName.Text, 0, 0);
                 allPlayers.Add(currentPlayer);
+
+                MdiChild BeginningMessageWindow = new MdiChild()
+                {
+                    Width = StartupWindow.Width,
+                    Height = StartupWindow.Height
+                    
+                };
+                
+                StackPanel spMessages = new StackPanel();
+                TextBlock lblMessage1 = new TextBlock() { Text = "Santa needs you help!", FontSize = 30, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap };
+                TextBlock lblMessage2 = new TextBlock() { Text = "Shortly after leaving the North Pole Santa crashed his sleigh and all the presents have gone missing. \n Can you help him find them?", FontSize = 26, FontFamily = new FontFamily("Kristen ITC"), TextWrapping=TextWrapping.Wrap};
+                spMessages.Children.Add(lblMessage1);
+                spMessages.Children.Add(lblMessage2);
+                BeginningMessageWindow.Content = spMessages;
+                Container.Children.Add(BeginningMessageWindow);
+                BeginningMessageWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 2 - StartupWindow.Height / 2);
             }
             allPlayers = Player.Deserialize(allPlayers);
             PopulatePesentImageList();
@@ -194,7 +209,7 @@ namespace Example
             Canvas.SetLeft(spBtns, 5);
 
             //Add Presents to the list Santas List
-            foreach (var present in Level.lstPresentImages)
+            foreach (var present in Level.SantasMissingPresentsList)
             {
                 lstPresents.Items.Add(present);
             }
@@ -227,7 +242,7 @@ namespace Example
                 }
                 Canvas.SetLeft(image.ImageObject, newLeftPos);
                 image.xAxisPosition = newLeftPos;
-                image.yAxisPosition = newTopPos;
+                //image.yAxisPosition = newTopPos;
                 lastImgTopPos = newTopPos;
                 lastImgLeftPos = newLeftPos;
             }    
@@ -423,7 +438,7 @@ namespace Example
                     Present pToRemove =null;
                     foreach (var i in lstPresentImg)
                     {
-                        if (i.ImageObject.Source.ToString().ToLower().Contains(presentDropped.ToLower()))//.Replace(" ","")))
+                        if (i.ImageObject.Source.ToString().ToLower().Contains(presentDropped.Replace(" ", "").ToLower()))//.Replace(" ","")))
                         {
                             pToRemove = i;
                         }
@@ -431,7 +446,7 @@ namespace Example
 
                     if (pToRemove != null)
                     {
-                        lstPresents.Items.RemoveAt(lstPresents.Items.IndexOf(pToRemove.Type));
+                        lstPresents.Items.RemoveAt(Level.lstPresentImages.IndexOf(pToRemove.Type));
                         lstPresentImg.Remove(pToRemove);
                         Level.lstPresentImages.Remove(pToRemove.ToString());                        
                     }

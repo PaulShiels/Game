@@ -21,8 +21,7 @@ namespace Example
         public bool BeingDragged { get; set; }
         public double MovementSpeed { get; set; }
         public Image ImageObject { get; set; }
-        public double xAxisPosition { get; set; }
-        public double yAxisPosition { get; set; }               
+        public double xAxisPosition { get; set; }             
 
         public Present(FileInfo imageFile)
         {
@@ -73,7 +72,7 @@ namespace Example
             //Check if the image path contains the name of any Presents in the list of Presents.
             foreach (var present in Level.lstPresentImages)
             {
-                if (imageSource.ToString().Contains(Regex.Replace(present.ToLower(), @"\s+", "")))
+                if (imageSource.ToString().Contains(present.Replace(" ", "_")))//Regex.Replace(present.ToLower(), @"\s+", "")))
                 {
                     return present;
                 }

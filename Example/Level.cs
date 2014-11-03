@@ -16,16 +16,15 @@ namespace Example
         public int ScoreboardScore { get; set; }
         public ImageBrush BackgroundImage { get; set; }
         public static List<string> lstPresentImages = new List<string>();
-        //public static ObservableCollection<string> lstPresentImages = new ObservableCollection<string>();// "Bicycle", "Football", "Phone", "Rocking Horse", "Book", "Rubber Duck", "Dinosaur", "Aeroplane", "Teddy", "Rc Car", "Laptop" };
-        //private List<string> santasListOfPresents = new List<string>();
-
+        public static List<string> SantasMissingPresentsList = new List<string>();
 
         public Level(int levelId, int score, string backgroundImageSource, List<string> SantasLostPresents)
         {
             this.LevelId = levelId;
             this.ScoreboardScore = score;
             this.BackgroundImage = setImage(backgroundImageSource);
-            lstPresentImages = FormatPresentNames(SantasLostPresents);
+            lstPresentImages = SantasLostPresents;
+            SantasMissingPresentsList = FormatPresentNames(SantasLostPresents);
         }
 
         private ImageBrush setImage(string backgroundImageSource)
@@ -39,17 +38,32 @@ namespace Example
         private List<string> FormatPresentNames(List<string> presents)
         {
             List<string> formattedPresents = new List<string>();
-
             foreach (var present in presents)
             {
-                formattedPresents.Add(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(present.ToLower()));
+                //Check if there is 2 words in the present name
+                if (present.Contains("_"))
+                {
+                    //Create array to hold the two lowercase words
+                    string[] words = present.Split('_');
+                    StringBuilder sb = new StringBuilder();
+
+                    //For each word in the present name, make the first letter uppercase
+                    foreach (var w in words)
+                    {
+                        sb.Append(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(w.ToLower()));
+                        sb.Append(" ");
+                    }
+
+                    //Add the reformatted present name to the list to be returned
+                    formattedPresents.Add(sb.ToString());
+                }
+                else
+                {
+                    //Make the first letter of the present name uppercase
+                    formattedPresents.Add(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(present.ToLower()));
+                }
             }
-            return presents;
+            return formattedPresents;
         }
-
-        //private List<string> GetListOfPresents(ObservableCollection<string> presents)
-        //{
-
-        //}
     }
 }
