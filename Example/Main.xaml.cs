@@ -102,10 +102,10 @@ namespace Example
         {
             btnNewGame.Visibility = Visibility.Hidden;
             btnLoadGame.Visibility = Visibility.Hidden;
-            //spStartupWindow.Children.Remove(btnNewGame);
-            //spStartupWindow.Children.Remove(btnLoadGame);
+            btnExit.Visibility = Visibility.Hidden;
             btnNewGame.Content = null;
             btnLoadGame.Content = null;
+            btnExit.Content = null;
             lbxPlayers.ItemsSource = null;
             Label lblName = new Label() {Content="Name", FontSize=30, HorizontalAlignment=HorizontalAlignment.Center };
             spStartupWindow.Children.Add(lblName);
@@ -150,27 +150,31 @@ namespace Example
             //spStartupWindow.Children.Remove(btnNewGame);
             //spStartupWindow.Children.Remove(btnLoadGame);
             btnNewGame.Visibility = System.Windows.Visibility.Hidden;
+            btnExit.Visibility = Visibility.Hidden;
             btnLoadGame.Visibility = System.Windows.Visibility.Hidden;
             btnNewGame.Content = null;
             btnLoadGame.Content = null;
-            //if(lbxPlayers.SelectedItem!=null)  
-            //lbxPlayers.UnselectAll();
-            if (lbxPlayers.ItemsSource==null)
-            lbxPlayers.ItemsSource = allPlayers;
+            btnExit.Content = null;
+            if (lbxPlayers.ItemsSource == null)
+                lbxPlayers.ItemsSource = allPlayers;
             btnBack.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            if(spStartupWindow.Children.Count==6)
+            if(spStartupWindow.Children.Count==7)
             {
-                spStartupWindow.Children.RemoveRange(3,3);
+                spStartupWindow.Children.RemoveRange(4,4);
             }
             lbxPlayers.Visibility = System.Windows.Visibility.Hidden;
             btnNewGame.Visibility = System.Windows.Visibility.Visible;
             btnLoadGame.Visibility = System.Windows.Visibility.Visible;
+            if (btnStartNewGame!=null)
+                btnStartNewGame.Visibility = Visibility.Hidden;
+            btnExit.Visibility = Visibility.Visible;
             btnNewGame.Content = "New Game";
             btnLoadGame.Content = "Load Game";
+            btnExit.Content = "Exit";
             btnBack.Visibility = System.Windows.Visibility.Hidden;
         }
 

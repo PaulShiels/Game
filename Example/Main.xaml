@@ -44,8 +44,8 @@
                     <StackPanel DockPanel.Dock="Top" Name="spStartupWindow">
                         <Button Name="btnNewGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnNewGame_Click">New Game</Button>
                         <Button Name="btnLoadGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnLoadGame_Click">Load Game</Button>
-                        <Button Name="btnExit" Margin="10,120,10,0" FontFamily="Kristen ITC" FontSize="35" Click="btnExit_Click">Exit</Button>
                         <ListBox Name="lbxPlayers" Margin="10" DisplayMemberPath="Name" FontSize="18" FontFamily="Kristen ITC" SelectionChanged="lbxPlayers_SelectionChanged" Visibility="Hidden"></ListBox>
+                        <Button Name="btnExit" Margin="10" FontFamily="Kristen ITC" FontSize="35" Click="btnExit_Click">Exit</Button>
                     </StackPanel>
                     <Button Name="btnBack" DockPanel.Dock="Bottom" Margin="10,5" FontFamily="Kristen ITC" MaxHeight="45" FontSize="28" Click="btnBack_Click"  Visibility="Hidden">Back</Button>
                 </DockPanel>

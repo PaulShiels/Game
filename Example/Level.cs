@@ -25,7 +25,7 @@ namespace Example
             this.LevelId = levelId;
             this.ScoreboardScore = score;
             this.BackgroundImage = setImage(backgroundImageSource);
-            lstPresentImages = SantasLostPresents;
+            lstPresentImages = FormatPresentNames(SantasLostPresents);
         }
 
         private ImageBrush setImage(string backgroundImageSource)
@@ -34,6 +34,17 @@ namespace Example
             i.ImageSource = new BitmapImage(new Uri(backgroundImageSource));
             i.Stretch = Stretch.UniformToFill;
             return i;
+        }
+
+        private List<string> FormatPresentNames(List<string> presents)
+        {
+            List<string> formattedPresents = new List<string>();
+
+            foreach (var present in presents)
+            {
+                formattedPresents.Add(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(present.ToLower()));
+            }
+            return presents;
         }
 
         //private List<string> GetListOfPresents(ObservableCollection<string> presents)
