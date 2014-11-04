@@ -5,7 +5,7 @@
 
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
-    <SolidColorBrush x:Key="BaseBackgroundBrush" Color="White" />
+    <SolidColorBrush x:Key="BaseBackgroundBrush" Color="Transparent" />
     <SolidColorBrush x:Key="BaseBorderBrush" Color="#FFBDBDBD" />
 
     <SolidColorBrush x:Key="TitleForegroundBrush" Color="#FFBEBEBE" />
@@ -22,8 +22,8 @@
                             <OuterGlowBitmapEffect GlowColor="Black" GlowSize="5" Opacity="0.2" />
                         </Border.BitmapEffect>
                         <Grid>
-                            <TextBlock Margin="10,0,0,0" Foreground="{StaticResource TitleForegroundBrush}" Text="{TemplateBinding Title}" />
-                            <Border Margin="10,26,10,10" BorderThickness="1" Background="{TemplateBinding Background}" BorderBrush="{StaticResource InnerBorderBrush}">
+                            <TextBlock Margin="5" Foreground="{StaticResource TitleForegroundBrush}" Text="{TemplateBinding Title}" />
+                            <Border Margin="5" BorderThickness="1" Background="{TemplateBinding Background}" BorderBrush="{StaticResource InnerBorderBrush}">
                                 <ContentControl Content="{TemplateBinding Content}" />
                             </Border>
                         </Grid>

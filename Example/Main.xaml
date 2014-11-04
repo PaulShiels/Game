@@ -39,7 +39,7 @@
                 </Grid>
             </mdi:MdiChild>
             
-            <mdi:MdiChild Name="StartupWindow" Loaded="StartupWindow_Loaded" WindowState="Normal">
+            <mdi:MdiChild Name="StartupWindow" Resizable="False" Loaded="StartupWindow_Loaded" WindowState="Normal">
                 <DockPanel>
                     <StackPanel DockPanel.Dock="Top" Name="spStartupWindow">
                         <Button Name="btnNewGame" Margin="10,5" FontFamily="Kristen ITC" FontSize="35" Click="btnNewGame_Click">New Game</Button>
@@ -73,8 +73,8 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Name="spList" Margin="10" Opacity="0.7" Grid.RowSpan="3"  Background="#FFF6F9E1">
-                        <Label Content="Santa's List" HorizontalContentAlignment="Center" Foreground="#FF972200" FontFamily="Snap ITC" FontSize="22"/>
-                        <ItemsControl Name="lstPresents" Margin="5, 0" Foreground="#FFF30000"  BorderThickness="0" FontFamily="Tempus Sans ITC" FontSize="18"/>
+                        <Label Content="Santa's List" HorizontalContentAlignment="Center" Foreground="#FF972200" FontFamily="Snap ITC" FontSize="28"/>
+                        <ItemsControl Name="lstPresents" Margin="5, 0" Foreground="#FFF30000" FontWeight="Bold"  BorderThickness="0" FontFamily="Tempus Sans ITC" FontSize="25"/>
                     </StackPanel>
                     <!--ItemsSource="{x:Static my:Level.lstPresentImages}"-->
                     <StackPanel Grid.Column="1" Opacity="0.8">

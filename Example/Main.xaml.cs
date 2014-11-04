@@ -127,35 +127,62 @@ namespace Example
         }
 
         private void btnStartNewGame_Click(object sender, RoutedEventArgs e)
-        {            
+        {
+            PlayingWindow.Visibility = Visibility.Visible;
+            ScoringWindow.Visibility = Visibility.Visible;
+            StartupWindow.Visibility = Visibility.Hidden;
+
+            //If the user has clicked New Game create a new player
             if (currentPlayer == null)
             {
                 currentPlayer = new Player(allPlayers.Count, tbxPlayerName.Text, 0, 0);
                 allPlayers.Add(currentPlayer);
 
+                ScoringWindow.Visibility = Visibility.Hidden;
+                PlayingWindow.Visibility = Visibility.Hidden;
+
+                //Level 1 will begin with this window which gives instructions
                 MdiChild BeginningMessageWindow = new MdiChild()
                 {
-                    Width = StartupWindow.Width,
+                    Width = StartupWindow.Width+130,
                     Height = StartupWindow.Height
-                    
+
                 };
-                
+
+                //Add a stackpanel to hold the following elements
                 StackPanel spMessages = new StackPanel();
-                TextBlock lblMessage1 = new TextBlock() { Text = "Santa needs you help!", FontSize = 30, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap };
-                TextBlock lblMessage2 = new TextBlock() { Text = "Shortly after leaving the North Pole Santa crashed his sleigh and all the presents have gone missing. \n Can you help him find them?", FontSize = 26, FontFamily = new FontFamily("Kristen ITC"), TextWrapping=TextWrapping.Wrap};
+                TextBlock lblMessage1 = new TextBlock() { Text = "SANTA NEEDS YOUR HELP! \n", FontSize = 29, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground=new SolidColorBrush(Colors.Red) };
+                TextBlock lblMessage2 = new TextBlock() { Text = "Shortly after leaving the North Pole Santa crashed his sleigh and all the presents have gone missing. \n Can you help him find them by checking his list and returning the presents to his sleigh? \n", FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.RosyBrown) };
+                Button btnGotIt = new Button() { Content = "Got it!", FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), MaxWidth=100 };
                 spMessages.Children.Add(lblMessage1);
-                spMessages.Children.Add(lblMessage2);
+                spMessages.Children.Add(lblMessage2); spMessages.Children.Add(btnGotIt);
                 BeginningMessageWindow.Content = spMessages;
                 Container.Children.Add(BeginningMessageWindow);
-                BeginningMessageWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 2 - StartupWindow.Height / 2);
+                BeginningMessageWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height / 2);
+                btnGotIt.Click += btnGotIt_Click;
             }
+
             allPlayers = Player.Deserialize(allPlayers);
             PopulatePesentImageList();
             PlayingWindow_Loaded(sender, e);
             ScoringWindow_Loaded(sender, e);
+            
+        }
+
+        private void btnGotIt_Click(object sender, RoutedEventArgs e)
+        {
+            //Keep getting the parent object up to the top level
+            //Set the visibility of this object to hidden to hide the Beginning Message window
+            Button btnGotIt = (Button)sender;
+            StackPanel sp = (StackPanel)btnGotIt.Parent;
+            ContentControl cc = (ContentControl)sp.Parent;
+            Border b = (Border)cc.Parent;
+            Grid g = (Grid)b.Parent;
+            Border b1 = (Border)g.Parent;
+            b1.Visibility = Visibility.Hidden;
             PlayingWindow.Visibility = Visibility.Visible;
             ScoringWindow.Visibility = Visibility.Visible;
-            StartupWindow.Visibility = Visibility.Hidden;
+            timer.Start();
         }
 
         private void btnLoadGame_Click(object sender, RoutedEventArgs e)
@@ -247,7 +274,7 @@ namespace Example
                 lastImgLeftPos = newLeftPos;
             }    
 
-            timer.Start();
+            //timer.Start();
         }
 
         private void PopulatePesentImageList()
