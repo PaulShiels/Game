@@ -53,7 +53,6 @@ namespace Example
         {
             //When the image is clicked copy the image path and set the being dragged property to true.
             Image image = e.Source as Image;
-            
             DataObject data = new DataObject(typeof(String), GetPresentType(image.Source));
             DragDrop.DoDragDrop(image, data, DragDropEffects.Copy);
             BeingDragged = true;
@@ -70,7 +69,7 @@ namespace Example
         public string GetPresentType(ImageSource imageSource)
         {
             //Check if the image path contains the name of any Presents in the list of Presents.
-            foreach (var present in Level.lstPresentImages)
+            foreach (var present in Level.lstAllPresentImages)
             {
                 if (imageSource.ToString().Contains(present.Replace(" ", "_")))//Regex.Replace(present.ToLower(), @"\s+", "")))
                 {

@@ -14,15 +14,16 @@ namespace Example
         public int PlayerId { get; set; }
         public string Name { get; set; }
         public int Score { get; set; }
-        public int LevelsCompleted { get; set; }
+        public Level CurrentLevel { get; set; }
         
 
-        public Player(int playerId, string playerName, int score, int levelsCompleted)
+        public Player(int playerId, string playerName, int score, Level currentLevel)
         {
             this.PlayerId = playerId;
             this.Name = playerName;
             this.Score = score;
-            this.LevelsCompleted = levelsCompleted;
+            this.CurrentLevel = currentLevel;
+            //this.LevelsCompleted = levelsCompleted;
         }
 
         //public override string ToString()

@@ -78,8 +78,8 @@
                     </StackPanel>
                     <!--ItemsSource="{x:Static my:Level.lstPresentImages}"-->
                     <StackPanel Grid.Column="1" Opacity="0.8">
-                        <Label Content="Score" HorizontalAlignment="Center" FontSize="55" FontFamily="Kristen ITC"></Label>
-                        <Label Name="lblScore" HorizontalAlignment="Center" FontSize="79" FontWeight="Bold" FontFamily="Kristen ITC"></Label>
+                        <Label Content="Score" HorizontalAlignment="Center" FontSize="55" FontFamily="Kristen ITC" Foreground="Red"></Label>
+                        <Label Name="lblScore" HorizontalAlignment="Center" FontSize="79" FontWeight="Bold" FontFamily="Kristen ITC" Foreground="Red"></Label>
                     </StackPanel>
                     <StackPanel Opacity="0.8" Background="#FFFFEFEF" Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
                         <Label Content="Correct:   " FontFamily="Kristen ITC" FontSize="30" Foreground="#FFF30000" ></Label>

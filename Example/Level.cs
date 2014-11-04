@@ -14,37 +14,45 @@ namespace Example
     {
         public int LevelId { get; set; }
         public int ScoreboardScore { get; set; }
-        public ImageBrush BackgroundImage { get; set; }
+        public ImageSource BackgroundImage { get; set; }
+        public string LevelBeginningMessage { get; set; }
+        public static List<string> lstAllPresentImages = new List<string>();
         public static List<string> lstPresentImages = new List<string>();
         public static List<string> SantasMissingPresentsList = new List<string>();
+        public List<Present> PresentsInThisLevel { get; set; }
 
-        public Level(int levelId, int score, string backgroundImageSource, List<string> SantasLostPresents)
+        public Level(int levelId, string beginMessage, int score, string backgroundImageSource, List<string> SantasLostPresents, List<Present> presentsForThisLevel)
         {
             this.LevelId = levelId;
+            this.LevelBeginningMessage = beginMessage;
             this.ScoreboardScore = score;
             this.BackgroundImage = setImage(backgroundImageSource);
-            lstPresentImages = SantasLostPresents;
-            SantasMissingPresentsList = FormatPresentNames(SantasLostPresents);
+            //lstPresentImages = SantasLostPresents;
+            //SantasMissingPresentsList = FormatPresentNames(SantasLostPresents);
+            this.PresentsInThisLevel = presentsForThisLevel;
         }
 
-        private ImageBrush setImage(string backgroundImageSource)
+        private ImageSource setImage(string backgroundImageSource)
         {
-            ImageBrush i = new ImageBrush();
-            i.ImageSource = new BitmapImage(new Uri(backgroundImageSource));
-            i.Stretch = Stretch.UniformToFill;
-            return i;
+            //ImageBrush i = new ImageBrush();
+            //i.ImageSource = new BitmapImage(new Uri(backgroundImageSource));
+            //i.Stretch = Stretch.UniformToFill;
+
+            Image image = new Image();
+            image.Source = new BitmapImage(new Uri(backgroundImageSource));
+            return image.Source;
         }
 
-        private List<string> FormatPresentNames(List<string> presents)
+        public static List<string> FormatPresentNames(List<Present> presents)
         {
             List<string> formattedPresents = new List<string>();
             foreach (var present in presents)
             {
                 //Check if there is 2 words in the present name
-                if (present.Contains("_"))
+                if (present.Type.Contains("_"))
                 {
                     //Create array to hold the two lowercase words
-                    string[] words = present.Split('_');
+                    string[] words = present.Type.Split('_');
                     StringBuilder sb = new StringBuilder();
 
                     //For each word in the present name, make the first letter uppercase
@@ -60,7 +68,7 @@ namespace Example
                 else
                 {
                     //Make the first letter of the present name uppercase
-                    formattedPresents.Add(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(present.ToLower()));
+                    formattedPresents.Add(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(present.Type.ToLower()));
                 }
             }
             return formattedPresents;
