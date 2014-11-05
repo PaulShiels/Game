@@ -313,7 +313,7 @@ namespace Example
                 present.xAxisPosition += present.MovementSpeed;
                 Canvas.SetLeft(present.ImageObject, present.xAxisPosition);
 
-                if (present.xAxisPosition >= PlayingWindow.Width)// || present.xAxisPosition<=ScoringWindow.Width+10)
+                if (present.xAxisPosition >= PlayingWindow.Width-present.ImageObject.Width)// || present.xAxisPosition<=ScoringWindow.Width+10)
                 {
                     presentToRemove = present;
                     cnvsPresents.Children.Remove(present.ImageObject);
@@ -466,18 +466,10 @@ namespace Example
                 e.Effects = DragDropEffects.Copy;
                 string presentDropped = e.Data.GetData(typeof(String)).ToString();
 
-                //If Santas list contins the present dropped remove this Present from santas list
+                //If Santas list contins the present dropped remove this Present from santas list and also remove the moving image
                 if (Level.lstPresentImages.Contains(presentDropped))
                 {
-                    currentPlayer.Score++;
-                    lblScore.Content = (Convert.ToInt32(lblScore.Content) + 1);
-                    lblCorrect.Content = Convert.ToInt32(lblCorrect.Content) + 1;
-
-                    //Level.lstPresentImages.RemoveAt(lstPresents.Items.IndexOf(presentDropped));
-
-                    //Find the present that needs to be removed
-                    //Remove it from the list of presents
-                    //Remove it from the xaml
+                    //Find the present that needs to be removed                    
                     Present pToRemove =null;
                     foreach (var i in currentPlayer.CurrentLevel.PresentsInThisLevel)
                     {
@@ -487,12 +479,17 @@ namespace Example
                         }
                     }
 
+                    //Is there is a present to be removed?
                     if (pToRemove != null)
                     {
+                        //Increase the scores by 1
+                        currentPlayer.Score++;
+                        lblScore.Content = (Convert.ToInt32(lblScore.Content) + 1);
+                        lblCorrect.Content = Convert.ToInt32(lblCorrect.Content) + 1;
+
+                        //Remove the Present from all the lists including the moving image                        
                         lstPresents.Items.RemoveAt(currentPlayer.CurrentLevel.PresentsInThisLevel.IndexOf(pToRemove));
-                        //Level.lstAllPresentImages.IndexOf(pToRemove.Type));
                         lstPresentImg.Remove(pToRemove);
-                        //Level.lstAllPresentImages.Remove(pToRemove.ToString());
                         currentPlayer.CurrentLevel.PresentsInThisLevel.Remove(pToRemove);
 
                         //If all the presents have been returned to the sleigh show a level complete message window
@@ -500,8 +497,8 @@ namespace Example
                         {
                             //Increase the level by 1
                             currentPlayer.CurrentLevel = levels[currentPlayer.CurrentLevel.LevelId + 1];
-                            
 
+                            //Create the level complete window
                             MdiChild LevelCompleteWindow = new MdiChild()
                             {
                                 Width = StartupWindow.Width + 130,
@@ -519,26 +516,25 @@ namespace Example
                             Container.Children.Add(LevelCompleteWindow);
                             LevelCompleteWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height / 2);
                             btnGotIt.Click += btnGotIt_Click;
+
+                            //Hide the Playing window and the Scoring window to make the Level complete window visible
                             PlayingWindow.Visibility = Visibility.Hidden;
                             ScoringWindow.Visibility = Visibility.Hidden;
                         }
                     }
-                    else
-                    {
+
+                    //If the prsent image has not already dissappeared, remove it now
+                    if (pToRemove!=null)
                         cnvsPresents.Children.Remove(pToRemove.ImageObject);
-                        lblIncorrect.Content = Convert.ToInt32(lblIncorrect.Content)-1;
-                    }
-                    cnvsPresents.Children.Remove(pToRemove.ImageObject);
                 }
             }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-                if (Convert.ToInt32(lblScore.Content)>0)
-                lblScore.Content = (Convert.ToInt32(lblScore.Content) - 1);
-
-                lblCorrect.Content = Convert.ToInt32(lblIncorrect.Content) + 1;
-            }               
+            //else
+            //{
+            //    e.Effects = DragDropEffects.None;
+            //    if (Convert.ToInt32(lblScore.Content)>0)
+            //    lblScore.Content = (Convert.ToInt32(lblScore.Content) - 1);
+            //    lblCorrect.Content = Convert.ToInt32(lblIncorrect.Content) + 1;
+            //}               
         }
 
         private void MenuItemExit_Click(object sender, RoutedEventArgs e)
