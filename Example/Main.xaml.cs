@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Data;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Windows.Interop;
+using System.Media;
 
 namespace Example
 {
@@ -57,6 +59,8 @@ namespace Example
 
         private void ContainerWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            SoundPlayer sound = new SoundPlayer(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString() + "\\Music" + "\\Jingle Bells Instrumental.wav");
+            sound.PlayLooping();
             ImageBrush backgroundImg = new ImageBrush();
             backgroundImg.ImageSource = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_Container.jpg"));
             backgroundImg.Stretch = Stretch.UniformToFill;
@@ -88,6 +92,7 @@ namespace Example
         private void PopulateListLevels()
         {
             lstAllPresents.Clear();
+            levels.Clear();
             foreach (var img in Directory.GetFiles(imagesFolder.ToString()))
             {
                 Level.lstAllPresentImages.Add(Path.GetFileNameWithoutExtension(img));
@@ -97,8 +102,8 @@ namespace Example
 		        lstAllPresents.Add(Path.GetFileNameWithoutExtension(img));
             }
 
-            levels.Add(new Level(0, "Shortly after leaving the North Pole Santa crashed his sleigh and all the presents have gone missing. \n Can you help him find them by checking his list and returning the presents to his sleigh? \n", 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L1.jpg", lstAllPresents, lstPresentImg.GetRange(0,10)));
-            levels.Add(new Level(1, "", 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L2.jpg", lstAllPresents, lstPresentImg.GetRange(10, 20)));
+            levels.Add(new Level(0, "Shortly after leaving the North Pole Santa crashed his sleigh and all the presents have gone missing. \n Can you help him find them by checking his list and returning the presents to his sleigh? \n", 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L1.jpg", lstAllPresents, lstPresentImg.GetRange(0,10),new int[]{8,12}));
+            levels.Add(new Level(1, "", 0, imagesFolder.ToString() + "/Backgrounds" + "/background_L2.jpg", lstAllPresents, lstPresentImg.GetRange(10, 20),new int[]{10,15}));
         }
 
         private void btnNewGame_Click(object sender, RoutedEventArgs e)
@@ -136,40 +141,40 @@ namespace Example
             ScoringWindow.Visibility = Visibility.Visible;
             StartupWindow.Visibility = Visibility.Hidden;
 
-            //If the user has clicked New Game create a new player
+            //If the user has clicked New Game, create a new player
             if (currentPlayer == null)
             {
                 currentPlayer = new Player(allPlayers.Count, tbxPlayerName.Text, 0,levels[0]);
-                allPlayers.Add(currentPlayer);
+                allPlayers.Add(currentPlayer);                
 
-                ScoringWindow.Visibility = Visibility.Hidden;
-                PlayingWindow.Visibility = Visibility.Hidden;
-
-                //Level 1 will begin with this window which gives instructions
-                MdiChild BeginningMessageWindow = new MdiChild()
-                {
-                    Width = StartupWindow.Width+130,
-                    Height = StartupWindow.Height
-
-                };
-
-                //Add a stackpanel to hold the following elements
-                StackPanel spMessages = new StackPanel();
-                TextBlock lblMessage1 = new TextBlock() { Text = "SANTA NEEDS YOUR HELP! \n", FontSize = 29, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground=new SolidColorBrush(Colors.Red) };
-                TextBlock lblMessage2 = new TextBlock() { Text = currentPlayer.CurrentLevel.LevelBeginningMessage, FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.RosyBrown) };
-                Button btnGotIt = new Button() { Content = "Got it!", FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), MaxWidth=100 };
-                spMessages.Children.Add(lblMessage1);
-                spMessages.Children.Add(lblMessage2); spMessages.Children.Add(btnGotIt);
-                BeginningMessageWindow.Content = spMessages;
-                Container.Children.Add(BeginningMessageWindow);
-                BeginningMessageWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height / 2);
-                btnGotIt.Click += btnGotIt_Click;
+                //Level 1 will begin with this window which gives instructions                
             }
+
+            MdiChild BeginningMessageWindow = new MdiChild()
+            {
+                Width = StartupWindow.Width + 130,
+                Height = StartupWindow.Height
+
+            };
+
+            //Add a stackpanel to hold the following elements
+            StackPanel spMessages = new StackPanel();
+            TextBlock lblMessage1 = new TextBlock() { Text = currentPlayer.CurrentLevel.LevelId == 0 ? "SANTA NEEDS YOUR HELP! \n" : "Level Complete", FontSize = 29, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.Red) };
+            TextBlock lblMessage2 = new TextBlock() { Text = currentPlayer.CurrentLevel.LevelBeginningMessage, FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.RosyBrown) };
+            Button btnGotIt = new Button() { Content = "Got it!", FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), MaxWidth = 100 };
+            spMessages.Children.Add(lblMessage1);
+            spMessages.Children.Add(lblMessage2); spMessages.Children.Add(btnGotIt);
+            BeginningMessageWindow.Content = spMessages;
+            Container.Children.Add(BeginningMessageWindow);
+            BeginningMessageWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height / 2);
+            btnGotIt.Click += btnGotIt_Click;
+            ScoringWindow.Visibility = Visibility.Hidden;
+            PlayingWindow.Visibility = Visibility.Hidden;
 
             allPlayers = Player.Deserialize(allPlayers);
             
-            PlayingWindow_Loaded(sender, e);
-            ScoringWindow_Loaded(sender, e);
+            //PlayingWindow_Loaded(sender, e);
+            //ScoringWindow_Loaded(sender, e);
             
         }
 
@@ -182,12 +187,14 @@ namespace Example
             Border b = (Border)cc.Parent;
             Grid g = (Grid)b.Parent;
             Border b1 = (Border)g.Parent;
+            g.Children.RemoveRange(0, g.Children.Count);
             b1.Visibility = Visibility.Hidden;
             //Set the visibility of this object to hidden to hide the Beginning Message window
             PlayingWindow.Visibility = Visibility.Visible;
             ScoringWindow.Visibility = Visibility.Visible;
-            //PlayingWindow_Loaded(sender,e);
-            //ScoringWindow_Loaded(sender, e);
+            lstPresents.Items.Clear();
+            PlayingWindow_Loaded(sender, e);
+            ScoringWindow_Loaded(sender, e);
             timer.Start();
         }
 
@@ -229,8 +236,8 @@ namespace Example
             PlayingWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
             PlayingWindow.Width = SystemParameters.PrimaryScreenWidth / 2 + SystemParameters.PrimaryScreenWidth / 6;
 
-            ImageBrush backgroundImg = new ImageBrush();
-            backgroundImg.ImageSource = currentPlayer.CurrentLevel.BackgroundImage; //levels[currentPlayer.LevelsCompleted].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
+            ImageBrush backgroundImg = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(currentPlayer.CurrentLevel.BackgroundImage.GetHbitmap(),IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions())); // new ImageBrush();
+            backgroundImg.ImageSource = backgroundImg.ImageSource; //levels[currentPlayer.LevelsCompleted].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
             backgroundImg.Stretch = Stretch.UniformToFill;
             backgroundImg.AlignmentX = AlignmentX.Left;
             imgCanvas.Background = backgroundImg;
@@ -241,9 +248,9 @@ namespace Example
 
             foreach (var image in currentPlayer.CurrentLevel.PresentsInThisLevel)
             {
+                image.MovementSpeed = image.GetRandomSpeed(new int[]{5,10});
                 Level.lstPresentImages.Add(image.Type);
-                //Level.SantasMissingPresentsList.Add(image.Type);
-                
+                //Level.SantasMissingPresentsList.Add(image.Type);                
             }
 
             Level.SantasMissingPresentsList = Level.FormatPresentNames(currentPlayer.CurrentLevel.PresentsInThisLevel);
@@ -257,38 +264,71 @@ namespace Example
 
             //Add the image of santa and set the position
             imgSanta.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "santa.png"));
+            imgSanta.MaxHeight = 250;
             Canvas.SetBottom(imgSanta, 5);
             Canvas.SetRight(imgSanta, 5);
 
+             ResetPresentPositions();
+
+            //timer.Start();
+        }
+
+        private void ResetPresentPositions()
+        {
             Random rndStartLeftPosition = new Random(), rndStartTopPosition = new Random();
             int lastImgLeftPos = 0, lastImgTopPos = 0, differenceTop = 0;
             foreach (var image in currentPlayer.CurrentLevel.PresentsInThisLevel) //lstPresentImg)
             {
-                image.ImageObject.Height += 100;
-                image.ImageObject.Width += 100;
-                cnvsPresents.Children.Add(image.ImageObject);
-                differenceTop = 0;
-
-                int newTopPos = 0;
-                while (differenceTop < 100)
+                if (image.ImageObject != null)
                 {
-                    newTopPos = rndStartTopPosition.Next(0, 400);
-                    differenceTop = Math.Abs(newTopPos - lastImgTopPos);
-                }
-                Canvas.SetTop(image.ImageObject, newTopPos);
+                    cnvsPresents.Children.Add(image.ImageObject);
+                    differenceTop = 0;
 
-                int newLeftPos = 0;
+                    int newTopPos = 0;
+                    while (differenceTop < 100)
+                    {
+                        //Get a random position to start the image from. 
+                        newTopPos = rndStartTopPosition.Next(0, (Convert.ToInt32(PlayingWindow.Height) / 4) * 2);
+                        differenceTop = Math.Abs(newTopPos - lastImgTopPos);
+                    }
+                    Canvas.SetTop(image.ImageObject, newTopPos);
+
+                    int newLeftPos = 0;
+                    {
+                        newLeftPos = lastImgLeftPos - 200; //rndStartLeftPosition.Next(-780, -90);
+                    }
+                    Canvas.SetLeft(image.ImageObject, newLeftPos);
+                    image.xAxisPosition = newLeftPos;
+                    //image.yAxisPosition = newTopPos;
+                    lastImgTopPos = newTopPos;
+                    lastImgLeftPos = newLeftPos;
+                }
+                else
                 {
-                    newLeftPos = lastImgLeftPos - 200; //rndStartLeftPosition.Next(-780, -90);
-                }
-                Canvas.SetLeft(image.ImageObject, newLeftPos);
-                image.xAxisPosition = newLeftPos;
-                //image.yAxisPosition = newTopPos;
-                lastImgTopPos = newTopPos;
-                lastImgLeftPos = newLeftPos;
-            }    
+                    FileInfo fi = new FileInfo(imagesFolder + image.Type + ".png");
+                    image.ImageObject = image.CreateImageObject(fi);
+                    cnvsPresents.Children.Add(image.ImageObject);
 
-            //timer.Start();
+                    int newTopPos = 0;
+                    while (differenceTop < 100 || newTopPos< 30)
+                    {
+                        //Get a random position to start the image from. 
+                        newTopPos = rndStartTopPosition.Next(0, (Convert.ToInt32(PlayingWindow.Height) / 4) * 2);
+                        differenceTop = Math.Abs(newTopPos - lastImgTopPos);
+                    }
+                    Canvas.SetTop(image.ImageObject, newTopPos);
+
+                    int newLeftPos = 0;
+                    {
+                        newLeftPos = lastImgLeftPos - 200; //rndStartLeftPosition.Next(-780, -90);
+                    }
+                    Canvas.SetLeft(image.ImageObject, newLeftPos);
+                    image.xAxisPosition = newLeftPos;
+                    //image.yAxisPosition = newTopPos;
+                    lastImgTopPos = newTopPos;
+                    lastImgLeftPos = newLeftPos;
+                }
+            }   
         }
 
         private void PopulatePesentImageList()
@@ -306,10 +346,10 @@ namespace Example
 
 
         private void timer_Tick(object sender, EventArgs e)
-        {
+        {             
             Present presentToRemove = null;
-            foreach (var present in currentPlayer.CurrentLevel.PresentsInThisLevel)// lstPresentImg)
-            {
+            foreach (var present in currentPlayer.CurrentLevel.PresentsInThisLevel)
+            {                
                 present.xAxisPosition += present.MovementSpeed;
                 Canvas.SetLeft(present.ImageObject, present.xAxisPosition);
 
@@ -448,15 +488,14 @@ namespace Example
             ScoringWindow.Height = (SystemParameters.PrimaryScreenHeight - menu.Height);
             ScoringWindow.Width = SystemParameters.PrimaryScreenWidth / 2 - SystemParameters.PrimaryScreenWidth / 6;
             ScoringWindow.Position = new Point((SystemParameters.PrimaryScreenWidth - ScoringWindow.Width), 0);
-            ImageBrush backgroundImg = new ImageBrush();
-            backgroundImg.ImageSource = currentPlayer.CurrentLevel.BackgroundImage;
+            ImageBrush backgroundImg = new ImageBrush(Imaging.CreateBitmapSourceFromHBitmap(currentPlayer.CurrentLevel.BackgroundImage.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions())); //new ImageBrush();
+            backgroundImg.ImageSource = backgroundImg.ImageSource; //currentPlayer.CurrentLevel.BackgroundImage;
             // levels[currentPlayer.LevelsCompleted].BackgroundImage.ImageSource; //new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "background_L1.jpg"));//, UriKind.Relative));
             backgroundImg.Stretch = Stretch.UniformToFill;
             backgroundImg.AlignmentX = AlignmentX.Right;
             ScoringWindow.Background = backgroundImg;
             imgSleigh.Source = new BitmapImage(new Uri(imagesFolder.ToString() + "/Backgrounds/" + "sleigh.png"));
             lblScore.Content = currentPlayer.Score.ToString();
-
         }
 
         private void imgSleigh_Drop(object sender, DragEventArgs e)
@@ -467,7 +506,7 @@ namespace Example
                 string presentDropped = e.Data.GetData(typeof(String)).ToString();
 
                 //If Santas list contins the present dropped remove this Present from santas list and also remove the moving image
-                if (Level.lstPresentImages.Contains(presentDropped))
+                if (Level.lstPresentImages.Contains(presentDropped) || Level.lstPresentImages.Contains(presentDropped.Remove(presentDropped.Length - 4, 4))) 
                 {
                     //Find the present that needs to be removed                    
                     Present pToRemove =null;
@@ -496,30 +535,16 @@ namespace Example
                         if (lstPresents.Items.Count == 0)
                         {
                             //Increase the level by 1
-                            currentPlayer.CurrentLevel = levels[currentPlayer.CurrentLevel.LevelId + 1];
-
-                            //Create the level complete window
-                            MdiChild LevelCompleteWindow = new MdiChild()
+                            if (levels.Count > currentPlayer.CurrentLevel.LevelId + 1)
                             {
-                                Width = StartupWindow.Width + 130,
-                                Height = StartupWindow.Height
-                            };
+                                currentPlayer.CurrentLevel = levels[currentPlayer.CurrentLevel.LevelId + 1];
+                            }
+                            else
+                            {
+                                CreateLevelBeginWindow("Congratulations, Game Complete \n");
+                            }
 
-                            //Add a stackpanel to hold the following elements
-                            StackPanel spMessages = new StackPanel();
-                            TextBlock lblMessage1 = new TextBlock() { Text = "LEVEL COMPLETE! \n", FontSize = 29, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.Red) };
-                            TextBlock lblMessage2 = new TextBlock() { Text = currentPlayer.CurrentLevel.LevelBeginningMessage, FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.RosyBrown) };
-                            Button btnGotIt = new Button() { Content = "Got it!", FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), MaxWidth = 100 };
-                            spMessages.Children.Add(lblMessage1);
-                            spMessages.Children.Add(lblMessage2); spMessages.Children.Add(btnGotIt);
-                            LevelCompleteWindow.Content = spMessages;
-                            Container.Children.Add(LevelCompleteWindow);
-                            LevelCompleteWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height / 2);
-                            btnGotIt.Click += btnGotIt_Click;
-
-                            //Hide the Playing window and the Scoring window to make the Level complete window visible
-                            PlayingWindow.Visibility = Visibility.Hidden;
-                            ScoringWindow.Visibility = Visibility.Hidden;
+                            CreateLevelBeginWindow("LEVEL COMPLETE! \n");
                         }
                     }
 
@@ -535,6 +560,30 @@ namespace Example
             //    lblScore.Content = (Convert.ToInt32(lblScore.Content) - 1);
             //    lblCorrect.Content = Convert.ToInt32(lblIncorrect.Content) + 1;
             //}               
+        }
+
+        private void CreateLevelBeginWindow(string message)
+        {
+            MdiChild BeginningMessageWindow = new MdiChild()
+            {
+                Width = StartupWindow.Width + 130,
+                Height = StartupWindow.Height
+
+            };
+
+            //Add a stackpanel to hold the following elements
+            StackPanel spMessages = new StackPanel();
+            TextBlock lblMessage1 = new TextBlock() { Text = message, FontSize = 29, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.Red) };
+            TextBlock lblMessage2 = new TextBlock() { Text = currentPlayer.CurrentLevel.LevelBeginningMessage, FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), TextWrapping = TextWrapping.Wrap, Foreground = new SolidColorBrush(Colors.RosyBrown) };
+            Button btnGotIt = new Button() { Content = "Got it!", FontSize = 20, FontFamily = new FontFamily("Kristen ITC"), MaxWidth = 100 };
+            spMessages.Children.Add(lblMessage1);
+            spMessages.Children.Add(lblMessage2); spMessages.Children.Add(btnGotIt);
+            BeginningMessageWindow.Content = spMessages;
+            Container.Children.Add(BeginningMessageWindow);
+            BeginningMessageWindow.Position = new Point((SystemParameters.PrimaryScreenWidth / 2 - StartupWindow.Width / 2), SystemParameters.PrimaryScreenHeight / 4 - StartupWindow.Height / 2);
+            btnGotIt.Click += btnGotIt_Click;
+            ScoringWindow.Visibility = Visibility.Hidden;
+            PlayingWindow.Visibility = Visibility.Hidden;
         }
 
         private void MenuItemExit_Click(object sender, RoutedEventArgs e)
@@ -558,8 +607,7 @@ namespace Example
             currentPlayer = (Player)lbxPlayers.SelectedItem;
 
             if(currentPlayer!=null)
-            {
-                
+            {                
                 btnStartNewGame_Click(sender, e);
             }
         }
@@ -573,6 +621,10 @@ namespace Example
                 currentPlayer = null;
                 cnvsPresents.Children.RemoveRange(0, cnvsPresents.Children.Count);
                 lstPresentImg.Clear();
+                Level.SantasMissingPresentsList.Clear();
+                Level.lstAllPresentImages.Clear();
+                lstPresents.Items.Clear(); 
+                Level.lstPresentImages.Clear();
                 ScoringWindow.Visibility = Visibility.Hidden;
                 PlayingWindow.Visibility = Visibility.Hidden;
                 //StartupWindow.Visibility = Visibility.Visible;

@@ -7,21 +7,25 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Drawing;
+using System.ComponentModel;
 
 namespace Example
 {
+    [Serializable]
     public class Level
     {
         public int LevelId { get; set; }
         public int ScoreboardScore { get; set; }
-        public ImageSource BackgroundImage { get; set; }
         public string LevelBeginningMessage { get; set; }
         public static List<string> lstAllPresentImages = new List<string>();
         public static List<string> lstPresentImages = new List<string>();
         public static List<string> SantasMissingPresentsList = new List<string>();
         public List<Present> PresentsInThisLevel { get; set; }
+        public Bitmap BackgroundImage { get; set; }
+        public int[] PresentSpeedRange { get; set; }
 
-        public Level(int levelId, string beginMessage, int score, string backgroundImageSource, List<string> SantasLostPresents, List<Present> presentsForThisLevel)
+        public Level(int levelId, string beginMessage, int score, string backgroundImageSource, List<string> SantasLostPresents, List<Present> presentsForThisLevel, int[] presentSpeedRange)
         {
             this.LevelId = levelId;
             this.LevelBeginningMessage = beginMessage;
@@ -30,17 +34,18 @@ namespace Example
             //lstPresentImages = SantasLostPresents;
             //SantasMissingPresentsList = FormatPresentNames(SantasLostPresents);
             this.PresentsInThisLevel = presentsForThisLevel;
+            this.PresentSpeedRange = presentSpeedRange;
         }
 
-        private ImageSource setImage(string backgroundImageSource)
+        private Bitmap setImage(string backgroundImageSource)
         {
             //ImageBrush i = new ImageBrush();
             //i.ImageSource = new BitmapImage(new Uri(backgroundImageSource));
             //i.Stretch = Stretch.UniformToFill;
 
-            Image image = new Image();
-            image.Source = new BitmapImage(new Uri(backgroundImageSource));
-            return image.Source;
+            Bitmap btImg = new Bitmap(backgroundImageSource);// = new Bitmap();
+            //image.Source = new BitmapImage(new Uri(backgroundImageSource));
+            return btImg;
         }
 
         public static List<string> FormatPresentNames(List<Present> presents)
@@ -73,5 +78,6 @@ namespace Example
             }
             return formattedPresents;
         }
+
     }
 }

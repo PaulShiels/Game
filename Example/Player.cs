@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
@@ -13,7 +14,7 @@ namespace Example
     {
         public int PlayerId { get; set; }
         public string Name { get; set; }
-        public int Score { get; set; }
+        public int Score { get; set; }        
         public Level CurrentLevel { get; set; }
         
 

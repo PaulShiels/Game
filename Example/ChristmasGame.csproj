@@ -64,6 +64,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -159,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Backgrounds\background_L1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Music\Jingle Bells Instrumental.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

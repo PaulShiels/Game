@@ -14,23 +14,25 @@ using System.Windows.Media.Imaging;
 
 namespace Example
 {
+    [Serializable]
     public class Present
     {
         public int PresentId;
         public string Type { get; set; }
         public bool BeingDragged { get; set; }
         public double MovementSpeed { get; set; }
-        public Image ImageObject { get; set; }
-        public double xAxisPosition { get; set; }             
+        public double xAxisPosition { get; set; }
+        [NonSerialized]
+        public Image ImageObject;// { get; set; } Set to NonSerialized because the image object can't be serialized and doesn't need to be serialized in this case.
 
         public Present(FileInfo imageFile)
         {
-            ImageObject = CreateImageObject(imageFile);
-            MovementSpeed = GetRandomSpeed();
+            this.ImageObject = CreateImageObject(imageFile);
+            //this.MovementSpeed = GetRandomSpeed();
             this.Type = GetPresentType(ImageObject.Source);
         }
 
-        private Image CreateImageObject(FileInfo imageFile)
+        public Image CreateImageObject(FileInfo imageFile)
         {
             //Create the image object and set the properties
             Image i = new Image();
@@ -44,8 +46,8 @@ namespace Example
             i.Source = new BitmapImage(new Uri(imageFile.FullName));            
             i.MouseDown += new MouseButtonEventHandler(imgPresent_MouseDown);
 
-            i.Height = 60;
-            i.Width = 90;
+            i.Height = 160;
+            i.Width = 160;
             return i;
         }
 
@@ -58,12 +60,10 @@ namespace Example
             BeingDragged = true;
         }
 
-        private double GetRandomSpeed()
+        public double GetRandomSpeed(int[] speedRange)
         {
-            //Random delay = new Random();
-            //Thread.Sleep(250);
             Random rnd = new Random();
-            return rnd.Next(2,8);
+            return rnd.Next(speedRange[0], speedRange[1]);
         }
 
         public string GetPresentType(ImageSource imageSource)
